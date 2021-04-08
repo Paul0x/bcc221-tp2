@@ -5,6 +5,7 @@
  */
 package com.bcc221.tp2.projetoclinica.ui;
 
+import com.bcc221.tp2.projetoclinica.services.MainService;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,10 +14,10 @@ import javax.swing.JOptionPane;
  */
 public class LoginScreen extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainScreen
-     */
-    public LoginScreen() {
+    private MainService mainService;
+    
+    public LoginScreen(MainService mainService) {
+        this.mainService = mainService;
         initComponents();
     }
 
@@ -35,8 +36,8 @@ public class LoginScreen extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        textFieldLogin = new javax.swing.JTextField();
+        textFieldSenha = new javax.swing.JPasswordField();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -66,9 +67,9 @@ public class LoginScreen extends javax.swing.JFrame {
 
         jLabel3.setText("Senha");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        textFieldLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                textFieldLoginActionPerformed(evt);
             }
         });
 
@@ -85,8 +86,8 @@ public class LoginScreen extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addComponent(jPasswordField1)))
+                            .addComponent(textFieldLogin)
+                            .addComponent(textFieldSenha)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -102,11 +103,11 @@ public class LoginScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textFieldLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addContainerGap(58, Short.MAX_VALUE))
@@ -133,17 +134,18 @@ public class LoginScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(jTextField1.getText().equals("admin")
-                && "admin".equals(new String(jPasswordField1.getPassword()))) {
-            JOptionPane.showMessageDialog(null, "Logado");
+        if(this.mainService.login(textFieldLogin.getText(),
+                new String(textFieldSenha.getPassword()))) {
             this.setVisible(false);
-            new MainScreen().setVisible(true);
+            new MainScreen(this.mainService).setVisible(true);
+        } else {            
+            JOptionPane.showMessageDialog(null, "Não foi possível realizar o login: login ou senha incorretos.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void textFieldLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldLoginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_textFieldLoginActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -153,7 +155,7 @@ public class LoginScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField textFieldLogin;
+    private javax.swing.JPasswordField textFieldSenha;
     // End of variables declaration//GEN-END:variables
 }

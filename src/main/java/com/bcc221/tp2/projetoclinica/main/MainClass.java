@@ -5,6 +5,7 @@
  */
 package com.bcc221.tp2.projetoclinica.main;
 
+import com.bcc221.tp2.projetoclinica.services.MainService;
 import com.bcc221.tp2.projetoclinica.ui.LoginScreen;
 
 /**
@@ -40,10 +41,13 @@ public class MainClass {
         //</editor-fold>
         //</editor-fold>
 
+        /* Cria o service principal do código */
+        MainService mainService = new MainService();
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LoginScreen().setVisible(true);
+                new LoginScreen(mainService).setVisible(true);
             }
         });
     }
