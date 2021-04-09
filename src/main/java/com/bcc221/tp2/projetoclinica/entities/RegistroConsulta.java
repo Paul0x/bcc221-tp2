@@ -6,25 +6,28 @@
 package com.bcc221.tp2.projetoclinica.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
  *
  * @author paulo
  */
-public class RegistroAgenda implements Serializable{
+public class RegistroConsulta implements Serializable {
     
     Integer codigo;
     LocalDate data;
-    String descricao;
+    String cliente;
+    BigDecimal valor;
 
-    public RegistroAgenda() {
+    public RegistroConsulta() {
     }
 
-    public RegistroAgenda(Integer codigo, LocalDate data, String descricao) {
+    public RegistroConsulta(Integer codigo, LocalDate data, String cliente, BigDecimal valor) {
         this.codigo = codigo;
         this.data = data;
-        this.descricao = descricao;
+        this.cliente = cliente;
+        this.valor = valor;
     }
 
     public Integer getCodigo() {
@@ -43,14 +46,22 @@ public class RegistroAgenda implements Serializable{
         this.data = data;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getCliente() {
+        return cliente;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
-    
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
     
     
 }
