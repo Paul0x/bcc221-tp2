@@ -14,6 +14,7 @@ import com.bcc221.tp2.projetoclinica.ui.utils.TabChangeListener;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -1172,7 +1173,21 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddConsultaActionPerformed
 
     private void btnAddRegistroAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRegistroAgendaActionPerformed
-        // TODO add your handling code here:
+       
+        /**
+         *  Adiciona novo registro na agenda do Especialista
+         */
+        
+        try {
+            String data = this.addAgendaData.getText();
+            String cliente = this.addAgendaCliente.getText();
+            String descricao = this.addAgendaDescricao.getText();
+            this.agendaService.addRegistroAgenda(data, cliente, descricao);
+            
+        } catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao adicionar: " + ex.getMessage());
+        }
+        
     }//GEN-LAST:event_btnAddRegistroAgendaActionPerformed
 
     private void btnSelectEspecialistaAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectEspecialistaAgendaActionPerformed
