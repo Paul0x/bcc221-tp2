@@ -6,6 +6,7 @@
 package com.bcc221.tp2.projetoclinica.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -18,6 +19,7 @@ public class RegistroPagamento implements Serializable {
     LocalDate dataPagamento;
     LocalDate dataVencimento;
     String tipo;
+    BigDecimal valor;
     
     public RegistroPagamento() {
     }
@@ -54,5 +56,14 @@ public class RegistroPagamento implements Serializable {
         this.tipo = tipo;
     }
 
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    
     
 }

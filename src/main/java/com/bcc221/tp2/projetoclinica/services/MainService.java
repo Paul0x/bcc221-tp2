@@ -2,6 +2,9 @@ package com.bcc221.tp2.projetoclinica.services;
 
 import com.bcc221.tp2.projetoclinica.entities.Administrador;
 import com.bcc221.tp2.projetoclinica.entities.Especialista;
+import com.bcc221.tp2.projetoclinica.entities.Funcionario;
+import com.bcc221.tp2.projetoclinica.entities.RegistroPonto;
+import com.bcc221.tp2.projetoclinica.entities.RegistroSalario;
 import com.bcc221.tp2.projetoclinica.entities.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,16 @@ public class MainService {
         admin3.setEmail("paulof@ufop.edu.br");
         admin3.setSenha("admin");
         admin3.setNome("José Odonto");
+
+        /*
+         * Cria registro de ponto para o funcionario 3
+         */
+        RegistroPonto pto = new RegistroPonto();
+        pto.setDia(2);
+        pto.setObservacao("asd123");
+        List<RegistroPonto> lP = new ArrayList<>();
+        lP.add(pto);
+        admin3.getPontoSalario().put(new RegistroSalario(2021,4), lP);
         this.usuarios.add(admin3);
     }
 
@@ -77,15 +90,21 @@ public class MainService {
     public void setCurrentUsuario(Usuario currentUsuario) {
         this.currentUsuario = currentUsuario;
     }
-    
+
     public List<Especialista> getEspecialistas() {
         List<Especialista> especialistas = new ArrayList();
-        for(Usuario usuario : usuarios) {
-            if(usuario.getClass().equals(Especialista.class)) {
-                especialistas.add((Especialista) usuario);
-            }
-        }
+        usuarios.stream().filter(usuario -> (usuario.getClass().equals(Especialista.class))).forEachOrdered(usuario -> {
+            especialistas.add((Especialista) usuario);
+        });
         return especialistas;
+    }
+
+    public List<Funcionario> getFuncionarios() {
+        List<Funcionario> funcionarios = new ArrayList();
+        usuarios.stream().filter(usuario -> (Funcionario.class.isAssignableFrom(usuario.getClass()))).forEachOrdered(usuario -> {
+            funcionarios.add((Funcionario) usuario);
+        });
+        return funcionarios;
     }
 
 }

@@ -15,10 +15,13 @@ import javax.swing.JOptionPane;
 public class LoginScreen extends javax.swing.JFrame {
 
     private MainService mainService;
-    
+
     public LoginScreen(MainService mainService) {
         this.mainService = mainService;
         initComponents();
+        this.mainService.login("admin", "admin");
+        this.setVisible(false);
+        new MainScreen(this.mainService).setVisible(true);
     }
 
     /**
@@ -134,11 +137,11 @@ public class LoginScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(this.mainService.login(textFieldLogin.getText(),
+        if (this.mainService.login(textFieldLogin.getText(),
                 new String(textFieldSenha.getPassword()))) {
             this.setVisible(false);
             new MainScreen(this.mainService).setVisible(true);
-        } else {            
+        } else {
             JOptionPane.showMessageDialog(null, "Não foi possível realizar o login: login ou senha incorretos.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed

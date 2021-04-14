@@ -6,11 +6,21 @@
 package com.bcc221.tp2.projetoclinica.ui;
 
 import com.bcc221.tp2.projetoclinica.entities.Especialista;
+import com.bcc221.tp2.projetoclinica.entities.Funcionario;
 import com.bcc221.tp2.projetoclinica.entities.RegistroAgenda;
 import com.bcc221.tp2.projetoclinica.entities.RegistroConsulta;
-import com.bcc221.tp2.projetoclinica.services.AgendaService;
+import com.bcc221.tp2.projetoclinica.entities.RegistroPagamento;
+import com.bcc221.tp2.projetoclinica.entities.RegistroSalario;
+import com.bcc221.tp2.projetoclinica.services.AgendaConsultaService;
 import com.bcc221.tp2.projetoclinica.services.MainService;
+import com.bcc221.tp2.projetoclinica.services.PagamentoService;
+import com.bcc221.tp2.projetoclinica.services.PontoSalarioService;
 import com.bcc221.tp2.projetoclinica.ui.utils.TabChangeListener;
+import com.github.lgooddatepicker.components.DatePicker;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -21,6 +31,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -29,7 +40,9 @@ import javax.swing.table.DefaultTableModel;
 public class MainScreen extends javax.swing.JFrame {
 
     private MainService mainService;
-    private AgendaService agendaService;
+    private AgendaConsultaService agendaConsultaService;
+    private PontoSalarioService pontoSalarioService;
+    private PagamentoService pagamentoService;
 
     /**
      * Creates new form MainScreen
@@ -84,18 +97,18 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         addAgendaDescricao = new javax.swing.JTextField();
         btnAddConsulta = new javax.swing.JButton();
-        addAgendaData = new javax.swing.JFormattedTextField();
         addConsultaCliente = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         addConsultaValor = new javax.swing.JFormattedTextField();
         jLabel15 = new javax.swing.JLabel();
+        addAgendaData = new com.github.lgooddatepicker.components.DateTimePicker();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        especialistasListAgenda1 = new javax.swing.JList<>();
-        panelAgendaConsultaInfo1 = new javax.swing.JPanel();
+        funcionarioListPonto = new javax.swing.JList<>();
+        panelPontoPagamento = new javax.swing.JPanel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -106,48 +119,58 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         labelFuncionarioFuncao = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        pontoComboAno = new javax.swing.JComboBox<>();
         jLabel30 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel19 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        pontoComboMes = new javax.swing.JComboBox<>();
+        btnLoadMesAno = new javax.swing.JButton();
+        panelPagamento = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
+        addSalarioValor = new javax.swing.JFormattedTextField();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
-        jButton2 = new javax.swing.JButton();
-        jLabel23 = new javax.swing.JLabel();
+        addSalarioDtPagamento = new com.github.lgooddatepicker.components.DatePicker();
+        addSalarioObservacao = new javax.swing.JFormattedTextField();
         jLabel24 = new javax.swing.JLabel();
-        jFormattedTextField3 = new javax.swing.JFormattedTextField();
+        addPagamentoBtn = new javax.swing.JButton();
+        jLabel23 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableSalarios = new javax.swing.JTable();
+        jLabel45 = new javax.swing.JLabel();
+        labelPagamentoMesAno = new javax.swing.JLabel();
+        panelFolhaPonto = new javax.swing.JPanel();
+        jLabel19 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tableFolhaPonto = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         btnSelectFuncionario = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tablePagamentos = new javax.swing.JTable();
         jLabel25 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jFormattedTextField5 = new javax.swing.JFormattedTextField();
-        jFormattedTextField6 = new javax.swing.JFormattedTextField();
-        jButton4 = new javax.swing.JButton();
+        addPagamentoDescricao = new javax.swing.JTextField();
+        addPagamentoTipo = new javax.swing.JComboBox<>();
+        btnAddPagamento = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        addPagamentoDtPagamento = new com.github.lgooddatepicker.components.DatePicker();
+        addPagamentoDtVencimento = new com.github.lgooddatepicker.components.DatePicker();
+        jLabel46 = new javax.swing.JLabel();
+        addPagamentoValor = new javax.swing.JFormattedTextField();
+        btnPagamentoRemover = new javax.swing.JButton();
+        btnPagamentoCancelarEdit = new javax.swing.JButton();
+        btnPagamentoEditar = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel42 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
         jButton10 = new javax.swing.JButton();
         jComboBox5 = new javax.swing.JComboBox<>();
-        jFormattedTextField4 = new javax.swing.JFormattedTextField();
-        jFormattedTextField7 = new javax.swing.JFormattedTextField();
+        datePicker4 = new com.github.lgooddatepicker.components.DatePicker();
+        datePicker5 = new com.github.lgooddatepicker.components.DatePicker();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
@@ -160,13 +183,13 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel40 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
         jComboBox4 = new javax.swing.JComboBox<>();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+        jFormattedTextField8 = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -179,8 +202,8 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
-        labelUsername.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         labelUsername.setText("{{labelUsername}}");
+        labelUsername.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
 
         jTabbedPane5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -369,13 +392,12 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
-        addAgendaData.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
-
         jLabel9.setText("Data");
 
         jLabel12.setText("Valor");
 
-        addConsultaValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        addConsultaValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
+        addConsultaValor.setValue(new Double(0.00));
 
         jLabel15.setText("Adicionar Pagamento Consulta");
 
@@ -394,20 +416,17 @@ public class MainScreen extends javax.swing.JFrame {
                             .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
                                 .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel11)
-                                    .addComponent(jLabel10))
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel9))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(addAgendaCliente)
-                                    .addComponent(addAgendaDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(addAgendaDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addAgendaData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
-                                .addGap(82, 82, 82)
-                                .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8)
-                                    .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(addAgendaData, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                                .addGap(104, 104, 104)
+                                .addComponent(jLabel8)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAddConsulta, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAgendaConsultaAddLayout.createSequentialGroup()
@@ -425,7 +444,7 @@ public class MainScreen extends javax.swing.JFrame {
         panelAgendaConsultaAddLayout.setVerticalGroup(
             panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAgendaConsultaAddLayout.createSequentialGroup()
-                .addContainerGap(48, Short.MAX_VALUE)
+                .addContainerGap(46, Short.MAX_VALUE)
                 .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel15))
@@ -433,9 +452,9 @@ public class MainScreen extends javax.swing.JFrame {
                 .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
                         .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(addAgendaData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel9)
+                            .addComponent(addAgendaData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
                             .addComponent(addAgendaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -476,7 +495,7 @@ public class MainScreen extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(86, 86, 86)
                         .addComponent(panelAgendaConsultaAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(293, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -501,12 +520,12 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel14.setText("Selecione o funcionário:");
 
-        especialistasListAgenda1.setModel(new javax.swing.AbstractListModel<String>() {
+        funcionarioListPonto.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane4.setViewportView(especialistasListAgenda1);
+        jScrollPane4.setViewportView(funcionarioListPonto);
 
         jLabel16.setText("Funcionário:");
 
@@ -526,200 +545,230 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel29.setText("Ano");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2021", "2022", "2023", "2024", "2025" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        pontoComboAno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2021", "2022", "2023", "2024", "2025" }));
+        pontoComboAno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                pontoComboAnoActionPerformed(evt);
             }
         });
 
         jLabel30.setText("Mês");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
+        pontoComboMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
+
+        btnLoadMesAno.setText("Carregar");
+        btnLoadMesAno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadMesAnoActionPerformed(evt);
+            }
+        });
+
+        jLabel20.setText("Inserir Pagamento do Mês:");
+
+        addSalarioValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        addSalarioValor.setValue(0);
+
+        jLabel21.setText("Valor:");
+
+        jLabel22.setText("Data de Pagamento:");
+
+        addSalarioObservacao.setText(" ");
+
+        jLabel24.setText("Observação:");
+
+        addPagamentoBtn.setText("Realizar Pagamento");
+        addPagamentoBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPagamentoBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel23.setText("Folha de Pagamento");
+
+        tableSalarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Mês/Ano", "Data", "Valor", "Observação"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(tableSalarios);
+
+        jLabel45.setText("Mês/Ano:");
+
+        labelPagamentoMesAno.setText("Não Informado");
+
+        javax.swing.GroupLayout panelPagamentoLayout = new javax.swing.GroupLayout(panelPagamento);
+        panelPagamento.setLayout(panelPagamentoLayout);
+        panelPagamentoLayout.setHorizontalGroup(
+            panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPagamentoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                    .addGroup(panelPagamentoLayout.createSequentialGroup()
+                        .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20)
+                            .addComponent(addPagamentoBtn)
+                            .addComponent(jLabel23)
+                            .addGroup(panelPagamentoLayout.createSequentialGroup()
+                                .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(jLabel21)
+                                    .addComponent(jLabel45))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelPagamentoMesAno)
+                                    .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(addSalarioValor, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(addSalarioObservacao)
+                                        .addComponent(addSalarioDtPagamento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        panelPagamentoLayout.setVerticalGroup(
+            panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPagamentoLayout.createSequentialGroup()
+                .addComponent(jLabel20)
+                .addGap(6, 6, 6)
+                .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(addSalarioValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(addSalarioDtPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel24)
+                    .addComponent(addSalarioObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel45)
+                    .addComponent(labelPagamentoMesAno))
+                .addGap(25, 25, 25)
+                .addComponent(addPagamentoBtn)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 163, Short.MAX_VALUE))
+        );
 
         jLabel19.setText("Folha");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableFolhaPonto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
                 {null, null},
                 {null, null},
                 {null, null},
                 {null, null}
             },
             new String [] {
-                "Data", "Observação"
+                "Dia", "Observação"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
+        ));
+        jScrollPane5.setViewportView(tableFolhaPonto);
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane5.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
-        }
-
-        jLabel20.setText("Inserir Pagamento do Mês:");
-
-        jLabel21.setText("Valor:");
-
-        jLabel22.setText("Data de Pagamento:");
-
-        jFormattedTextField1.setText(" ");
-
-        jFormattedTextField2.setText(" ");
-
-        jButton2.setText("Realizar Pagamento");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jLabel23.setText("Folha de Pagamento");
-
-        jLabel24.setText("Observação:");
-
-        jFormattedTextField3.setText(" ");
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Data", "Valor", "Observação"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane6.setViewportView(jTable2);
-
-        jButton3.setText("Salvar Folha");
+        jButton3.setText("Atualizar Folha");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout panelAgendaConsultaInfo1Layout = new javax.swing.GroupLayout(panelAgendaConsultaInfo1);
-        panelAgendaConsultaInfo1.setLayout(panelAgendaConsultaInfo1Layout);
-        panelAgendaConsultaInfo1Layout.setHorizontalGroup(
-            panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAgendaConsultaInfo1Layout.createSequentialGroup()
-                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelFolhaPontoLayout = new javax.swing.GroupLayout(panelFolhaPonto);
+        panelFolhaPonto.setLayout(panelFolhaPontoLayout);
+        panelFolhaPontoLayout.setHorizontalGroup(
+            panelFolhaPontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFolhaPontoLayout.createSequentialGroup()
+                .addGroup(panelFolhaPontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel19)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+        panelFolhaPontoLayout.setVerticalGroup(
+            panelFolhaPontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFolhaPontoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel19)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3)
+                .addContainerGap(86, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout panelPontoPagamentoLayout = new javax.swing.GroupLayout(panelPontoPagamento);
+        panelPontoPagamento.setLayout(panelPontoPagamentoLayout);
+        panelPontoPagamentoLayout.setHorizontalGroup(
+            panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPontoPagamentoLayout.createSequentialGroup()
+                .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPontoPagamentoLayout.createSequentialGroup()
                         .addComponent(jLabel16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(labelFuncionarioNome))
-                    .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
+                    .addGroup(panelPontoPagamentoLayout.createSequentialGroup()
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelFuncionarioCpf)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel28, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelFuncionarioEmail)
                     .addComponent(labelFuncionarioFuncao))
                 .addGap(159, 159, 159))
-            .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
+            .addGroup(panelPontoPagamentoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
-                        .addComponent(jSeparator2)
-                        .addContainerGap())
-                    .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
-                        .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
-                                .addComponent(jLabel29)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2)
+                    .addGroup(panelPontoPagamentoLayout.createSequentialGroup()
+                        .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelPontoPagamentoLayout.createSequentialGroup()
+                                .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnLoadMesAno)
+                                    .addGroup(panelPontoPagamentoLayout.createSequentialGroup()
+                                        .addComponent(jLabel29)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(pontoComboAno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel30)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel19)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3))
-                        .addGap(33, 33, 33)
-                        .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
-                                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jLabel21))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-                                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jFormattedTextField3)))
-                            .addComponent(jLabel20)
-                            .addComponent(jButton2)
-                            .addComponent(jLabel23)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 63, Short.MAX_VALUE))))
+                                .addComponent(pontoComboMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(panelFolhaPonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
-        panelAgendaConsultaInfo1Layout.setVerticalGroup(
-            panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAgendaConsultaInfo1Layout.createSequentialGroup()
-                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        panelPontoPagamentoLayout.setVerticalGroup(
+            panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPontoPagamentoLayout.createSequentialGroup()
+                .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(jLabel17)
                     .addComponent(labelFuncionarioNome)
                     .addComponent(labelFuncionarioEmail))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
                     .addComponent(labelFuncionarioCpf)
                     .addComponent(jLabel28)
@@ -727,40 +776,19 @@ public class MainScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel29)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel30)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel20))
-                .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel19)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPontoPagamentoLayout.createSequentialGroup()
+                        .addGroup(panelPontoPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel29)
+                            .addComponent(pontoComboAno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel30)
+                            .addComponent(pontoComboMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3))
-                    .addGroup(panelAgendaConsultaInfo1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel21)
-                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel22)
-                            .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelAgendaConsultaInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel24)
-                            .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(42, 42, 42)
-                        .addComponent(jButton2)
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel23)
+                        .addComponent(btnLoadMesAno)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(69, Short.MAX_VALUE))
+                        .addComponent(panelFolhaPonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnSelectFuncionario.setText("Selecionar");
@@ -782,8 +810,8 @@ public class MainScreen extends javax.swing.JFrame {
                         .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(btnSelectFuncionario))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelAgendaConsultaInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addComponent(panelPontoPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 880, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -798,34 +826,30 @@ public class MainScreen extends javax.swing.JFrame {
                         .addComponent(btnSelectFuncionario))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(panelAgendaConsultaInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(20, 20, 20))
+                        .addComponent(panelPontoPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1005, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(0, 19, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 20, Short.MAX_VALUE)))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 782, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 769, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane5.addTab("Controle de Ponto e Salário", jPanel2);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tablePagamentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -833,18 +857,23 @@ public class MainScreen extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Descrição", "Data Pagamento", "Data Vencimento", "Tipo", "-"
+                "Descrição", "Data Pagamento", "Data Vencimento", "Valor", "Tipo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, true, true, false, false
+                true, true, true, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane7.setViewportView(jTable3);
+        tablePagamentos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tablePagamentosKeyReleased(evt);
+            }
+        });
+        jScrollPane7.setViewportView(tablePagamentos);
 
         jLabel25.setText("Tabela de Compras");
 
@@ -858,15 +887,32 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel33.setText("Data Vencimento");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Água", "Luz", "Aluguel", "Telefone", "Produtos Limpeza", "Material Escritório", "Material Atendimento" }));
+        addPagamentoTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Água", "Luz", "Aluguel", "Telefone", "Produtos Limpeza", "Material Escritório", "Material Atendimento" }));
 
-        jFormattedTextField5.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        btnAddPagamento.setText("Adicionar Compra");
+        btnAddPagamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPagamentoActionPerformed(evt);
+            }
+        });
 
-        jFormattedTextField6.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        jButton5.setText("Editar Compra Selecionada");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Adicionar Compra");
+        jLabel46.setText("Valor");
 
-        jButton5.setText("Atualizar Compras");
+        addPagamentoValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        addPagamentoValor.setValue(0.00);
+
+        btnPagamentoRemover.setText("Remover Compra");
+
+        btnPagamentoCancelarEdit.setText("Cancelar Edição");
+
+        btnPagamentoEditar.setText("Editar Compra");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -879,24 +925,33 @@ public class MainScreen extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel25)
-                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel26)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(btnAddPagamento)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnPagamentoEditar))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel27)
                                     .addComponent(jLabel31)
                                     .addComponent(jLabel32)
-                                    .addComponent(jLabel33))
+                                    .addComponent(jLabel33)
+                                    .addComponent(jLabel46))
                                 .addGap(23, 23, 23)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jComboBox3, 0, 176, Short.MAX_VALUE)
-                                    .addComponent(jFormattedTextField5)
-                                    .addComponent(jFormattedTextField6)))
-                            .addComponent(jButton4))))
-                .addContainerGap(182, Short.MAX_VALUE))
+                                    .addComponent(addPagamentoDescricao)
+                                    .addComponent(addPagamentoTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(addPagamentoDtPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addPagamentoDtVencimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addPagamentoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(btnPagamentoRemover)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnPagamentoCancelarEdit)))))
+                .addContainerGap(202, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -911,21 +966,31 @@ public class MainScreen extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel27)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addPagamentoDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel31)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addPagamentoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel32)
-                            .addComponent(jFormattedTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addPagamentoDtPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel33)
-                            .addComponent(jFormattedTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addPagamentoDtVencimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel46)
+                            .addComponent(addPagamentoValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAddPagamento)
+                            .addComponent(btnPagamentoEditar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnPagamentoRemover)
+                            .addComponent(btnPagamentoCancelarEdit))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton5)
                 .addGap(20, 20, 20))
@@ -943,10 +1008,6 @@ public class MainScreen extends javax.swing.JFrame {
 
         jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Relatório de Pagamentos", "Relatório de Gastos", "Relatório de Salários" }));
 
-        jFormattedTextField4.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
-
-        jFormattedTextField7.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -963,10 +1024,9 @@ public class MainScreen extends javax.swing.JFrame {
                         .addGap(54, 54, 54)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jFormattedTextField7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                                .addComponent(jFormattedTextField4, javax.swing.GroupLayout.Alignment.LEADING)))))
-                .addContainerGap(510, Short.MAX_VALUE))
+                            .addComponent(datePicker4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(datePicker5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(686, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -978,11 +1038,11 @@ public class MainScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel43)
-                    .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(datePicker4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel44)
-                    .addComponent(jFormattedTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(datePicker5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton10)
                 .addGap(100, 100, 100))
@@ -1038,6 +1098,12 @@ public class MainScreen extends javax.swing.JFrame {
 
         jButton9.setText("Atualizar");
 
+        try {
+            jFormattedTextField8.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -1057,19 +1123,11 @@ public class MainScreen extends javax.swing.JFrame {
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jLabel37)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel36, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel35))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jLabel38)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel39)
@@ -1079,7 +1137,15 @@ public class MainScreen extends javax.swing.JFrame {
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
                                             .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jPasswordField1))))
+                                            .addComponent(jPasswordField1)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel38)
+                                            .addComponent(jLabel37))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                                            .addComponent(jFormattedTextField8))))
                                 .addGap(420, 420, 420))
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(jButton8)
@@ -1102,7 +1168,7 @@ public class MainScreen extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel37)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jFormattedTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel38)
@@ -1134,15 +1200,15 @@ public class MainScreen extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTabbedPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1010, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1186, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelUsername)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(492, 492, 492)
                         .addComponent(jButton1)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1170,24 +1236,36 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void btnAddConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddConsultaActionPerformed
         // TODO add your handling code here:
+        /**
+         * Adiciona novo registro no pagamento de consultas do Especialista
+         */
+        try {
+            String cliente = this.addConsultaCliente.getText();
+            Double valor = ((Number) this.addConsultaValor.getValue()).doubleValue();
+            this.agendaConsultaService.addRegistroConsulta(cliente, valor);
+            this.fillConsultaJTable(this.agendaConsultaService.getCurrentEspecialista().getConsultas());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao adicionar: " + ex.getMessage());
+        }
     }//GEN-LAST:event_btnAddConsultaActionPerformed
 
     private void btnAddRegistroAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRegistroAgendaActionPerformed
-       
+
+        System.out.println("Adicionar agenda");
         /**
-         *  Adiciona novo registro na agenda do Especialista
+         * Adiciona novo registro na agenda do Especialista
          */
-        
         try {
-            String data = this.addAgendaData.getText();
+            LocalDate data = this.addAgendaData.getDatePicker().getDate();
+            LocalTime hora = this.addAgendaData.getTimePicker().getTime();
             String cliente = this.addAgendaCliente.getText();
             String descricao = this.addAgendaDescricao.getText();
-            this.agendaService.addRegistroAgenda(data, cliente, descricao);
-            
-        } catch(Exception ex) {
+            this.agendaConsultaService.addRegistroAgenda(data, hora, cliente, descricao);
+            this.fillAgendaJTable(this.agendaConsultaService.getCurrentEspecialista().getAgenda());
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao adicionar: " + ex.getMessage());
         }
-        
+
     }//GEN-LAST:event_btnAddRegistroAgendaActionPerformed
 
     private void btnSelectEspecialistaAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectEspecialistaAgendaActionPerformed
@@ -1196,10 +1274,10 @@ public class MainScreen extends javax.swing.JFrame {
          * Seleciona o especialista e carrega sua agenda e consultas
          */
         System.out.println(this.especialistasListAgenda.getSelectedIndex());
-        this.agendaService.setCurrentEspecialista(this.agendaService.getEspecialistas().get(this.especialistasListAgenda.getSelectedIndex()));
-        this.labelEspecialistaCpf.setText(this.agendaService.getCurrentEspecialista().getCpf());
-        this.labelEspecialistaAgendaEmail.setText(this.agendaService.getCurrentEspecialista().getEmail());
-        this.labelEspecialistaNome.setText(this.agendaService.getCurrentEspecialista().getNome());
+        this.agendaConsultaService.setCurrentEspecialista(this.agendaConsultaService.getEspecialistas().get(this.especialistasListAgenda.getSelectedIndex()));
+        this.labelEspecialistaCpf.setText(this.agendaConsultaService.getCurrentEspecialista().getCpf());
+        this.labelEspecialistaAgendaEmail.setText(this.agendaConsultaService.getCurrentEspecialista().getEmail());
+        this.labelEspecialistaNome.setText(this.agendaConsultaService.getCurrentEspecialista().getNome());
 
         /**
          * Habilita os componentes de visualização
@@ -1210,37 +1288,138 @@ public class MainScreen extends javax.swing.JFrame {
         /**
          * Carrega as tabelas
          */
-        this.fillAgendaJTable(this.agendaService.getCurrentEspecialista().getAgenda());
-        this.fillConsultaJTable(this.agendaService.getCurrentEspecialista().getConsultas());
+        this.fillAgendaJTable(this.agendaConsultaService.getCurrentEspecialista().getAgenda());
+        this.fillConsultaJTable(this.agendaConsultaService.getCurrentEspecialista().getConsultas());
     }//GEN-LAST:event_btnSelectEspecialistaAgendaActionPerformed
 
     private void btnSelectFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectFuncionarioActionPerformed
         // TODO add your handling code here:
+
+        /**
+         * Seleciona o funcionário e carrega suas informações
+         */
+        System.out.println(this.especialistasListAgenda.getSelectedIndex());
+        this.pontoSalarioService.setCurrentFuncionario(this.pontoSalarioService.getFuncionarios().get(this.funcionarioListPonto.getSelectedIndex()));
+        this.labelFuncionarioCpf.setText(this.pontoSalarioService.getCurrentFuncionario().getCpf());
+        this.labelFuncionarioEmail.setText(this.pontoSalarioService.getCurrentFuncionario().getEmail());
+        this.labelFuncionarioNome.setText(this.pontoSalarioService.getCurrentFuncionario().getNome());
+        this.labelFuncionarioFuncao.setText(this.pontoSalarioService.getCurrentFuncionario().getClass().getSimpleName());
+
+        /**
+         * Preenche a tabela de salários
+         */
+        this.fillSalariosJTable();;
+        /**
+         * Habilita os componentes de visualização
+         */
+        this.panelPontoPagamento.setVisible(true);
+        this.panelPagamento.setVisible(true);
+
     }//GEN-LAST:event_btnSelectFuncionarioActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void addPagamentoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPagamentoBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        try {
+            Double valor = ((Number) this.addSalarioValor.getValue()).doubleValue();
+            LocalDate dtPagamento = this.addSalarioDtPagamento.getDate();
+            String observacao = this.addSalarioObservacao.getText();
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+            this.pontoSalarioService.addPagamento(valor, dtPagamento, observacao);
+            this.fillSalariosJTable();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao atualizar: " + ex.getMessage());
+        }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_addPagamentoBtnActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
 
+    private void pontoComboAnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pontoComboAnoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pontoComboAnoActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        try {
+            TableModel model = this.tableFolhaPonto.getModel();
+            this.pontoSalarioService.updateFolhaPonto(model);
+            JOptionPane.showMessageDialog(null, "Folha de ponto atualizada com sucesso.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao atualizar a folha de ponto: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnLoadMesAnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadMesAnoActionPerformed
+        // TODO add your handling code here:
+        this.pontoSalarioService.setCurrentAno(new Integer((String) this.pontoComboAno.getSelectedItem()));
+        this.pontoSalarioService.setCurrentMes(this.pontoComboMes.getSelectedIndex() + 1);
+        this.labelPagamentoMesAno.setText(this.pontoSalarioService.getCurrentMes() + "/" + this.pontoSalarioService.getCurrentAno());
+        this.panelFolhaPonto.setVisible(true);
+        this.fillPontoJTable();
+    }//GEN-LAST:event_btnLoadMesAnoActionPerformed
+
+    private void btnAddPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPagamentoActionPerformed
+        // TODO add your handling code here:
+        try {
+            String descricao = this.addPagamentoDescricao.getText();
+            String tipo = (String) this.addPagamentoTipo.getSelectedItem();
+            LocalDate dtPagamento = this.addPagamentoDtPagamento.getDate();
+            LocalDate dtVencimento = this.addPagamentoDtVencimento.getDate();
+            Double valor = ((Number) this.addPagamentoValor.getValue()).doubleValue();
+            this.pagamentoService.addPagamento(descricao, tipo, dtPagamento, dtVencimento, valor);
+            this.fillPagamentosJTable();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao adicionar pagamento: " + ex.getMessage());
+        }
+
+
+    }//GEN-LAST:event_btnAddPagamentoActionPerformed
+
+    private void tablePagamentosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablePagamentosKeyReleased
+        // TODO add your handling code here:
+        System.out.println(evt.getKeyCode());
+
+        evt.getSource();
+    }//GEN-LAST:event_tablePagamentosKeyReleased
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        Integer linhaSelecionada = this.tablePagamentos.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha para edição");
+        }
+        try {
+            TableModel model = this.tablePagamentos.getModel();
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("d/MM/yyyy");
+            this.addPagamentoDescricao.setText((String) model.getValueAt(linhaSelecionada, 0));
+            this.addPagamentoTipo.setSelectedItem((String) model.getValueAt(linhaSelecionada, 4));
+            this.addPagamentoDtPagamento.setDate(LocalDate.parse((String) model.getValueAt(linhaSelecionada, 1), format));
+            this.addPagamentoDtVencimento.setDate(LocalDate.parse((String) model.getValueAt(linhaSelecionada, 2), format));
+            // Remove o cifrão
+            String doubleStr = (String) model.getValueAt(linhaSelecionada, 3);
+            doubleStr = doubleStr.substring(3);
+            this.addPagamentoValor.setValue(new Double(doubleStr));
+            this.btnPagamentoEditar.setVisible(true);
+            this.btnPagamentoCancelarEdit.setVisible(true);
+            this.btnPagamentoRemover.setVisible(true);
+            this.btnAddPagamento.setVisible(false);
+            this.pagamentoService.setIsEdicao(true);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao iniciar edição:" + ex.getMessage());
+
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     private void fillAgendaJTable(List<RegistroAgenda> agenda) {
         Object[][] array = new Object[agenda.size()][3];
         int i = 0;
         for (RegistroAgenda registro : agenda) {
-            array[i][0] = registro.getData().format(DateTimeFormatter.ofPattern("dd/mm/YYYY"));
+            array[i][0] = registro.getData().format(DateTimeFormatter.ofPattern("dd/MM/YYYY")) + " " + registro.getHora().format(DateTimeFormatter.ofPattern("HH:mm"));
             array[i][1] = registro.getDescricao();
             array[i][2] = "Remover";
+            i++;
         }
         DefaultTableModel model = new DefaultTableModel(array, new String[]{"Data", "Nome/Desc", "-"});
         this.tableEspecialistaAgenda.setModel(model);
@@ -1251,17 +1430,68 @@ public class MainScreen extends javax.swing.JFrame {
         int i = 0;
         for (RegistroConsulta registro : consultas) {
             array[i][0] = registro.getCliente();
-            array[i][1] = registro.getValor();
+            array[i][1] = "R$ " + registro.getValor();
             array[i][2] = "Remover";
+            i++;
         }
         DefaultTableModel model = new DefaultTableModel(array, new String[]{"Cliente", "Valor", "-"});
         this.tableEspecialistaConsultas.setModel(model);
     }
 
+    private void fillPontoJTable() {
+        YearMonth yearMonthObject = YearMonth.of(this.pontoSalarioService.getCurrentAno(), this.pontoSalarioService.getCurrentMes());
+        Integer numDias = yearMonthObject.lengthOfMonth();
+
+        List<String> observacoes = this.pontoSalarioService.getCurrentObservacoesPonto(numDias);
+
+        Object[][] array = new Object[numDias][2];
+        for (int i = 1; i <= numDias; i++) {
+            array[i - 1][0] = i;
+            array[i - 1][1] = (observacoes.get(i - 1) != null) ? observacoes.get(i - 1) : " - ";
+        }
+        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Dia", "Observação"});
+        this.tableFolhaPonto.setModel(model);
+    }
+
+    private void fillSalariosJTable() {
+
+        List<RegistroSalario> salarios = this.pontoSalarioService.getCurrentSalarioList();
+
+        Object[][] array = new Object[salarios.size()][4];
+        for (int i = 0; i < salarios.size(); i++) {
+            if (salarios.get(i).getDtPagamento() != null && salarios.get(i).getValor() != null) {
+                array[i][0] = salarios.get(i).getMes() + "/" + salarios.get(i).getAno();
+                array[i][1] = salarios.get(i).getDtPagamento().format(DateTimeFormatter.ofPattern("dd/MM/YYYY"));
+                array[i][2] = "R$ " + salarios.get(i).getValor();
+                array[i][3] = salarios.get(i).getObservacao();
+            }
+        }
+        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Mês/Ano", "Data", "Valor", "Observação"});
+        this.tableSalarios.setModel(model);
+    }
+
+    private void fillPagamentosJTable() {
+
+        List<RegistroPagamento> pagamentos = this.pagamentoService.getPagamentos();
+
+        Object[][] array = new Object[pagamentos.size()][5];
+        for (int i = 0; i < pagamentos.size(); i++) {
+            array[i][0] = pagamentos.get(i).getDescricao();
+            array[i][1] = pagamentos.get(i).getDataPagamento().format(DateTimeFormatter.ofPattern("dd/MM/YYYY"));
+            array[i][2] = pagamentos.get(i).getDataVencimento().format(DateTimeFormatter.ofPattern("dd/MM/YYYY"));
+            array[i][3] = "R$ " + pagamentos.get(i).getValor();
+            array[i][4] = pagamentos.get(i).getTipo();
+        }
+        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Descrição", "Dt. Pagamento", "Dt. Vencimento", "Valor", "Tipo"});
+        this.tablePagamentos.setModel(model);
+    }
+
     private void initScreen() {
         this.labelUsername.setText(this.mainService.getCurrentUsuario().getNome() + " | " + this.mainService.getCurrentUsuario().getClass().getSimpleName());
         this.jTabbedPane5.addChangeListener(new TabChangeListener(this));
-        this.agendaService = new AgendaService();
+        this.agendaConsultaService = new AgendaConsultaService();
+        this.pontoSalarioService = new PontoSalarioService();
+        this.pagamentoService = new PagamentoService();
     }
 
     public void loadMainMenuIndex(Integer index) {
@@ -1269,15 +1499,38 @@ public class MainScreen extends javax.swing.JFrame {
             case 0:
                 this.loadAgendaTab();
                 break;
+            case 1:
+                this.loadPontoTab();
+                break;
+            case 2:
+                this.loadPagamentoTab();
+                break;
         }
     }
 
     private void loadAgendaTab() {
-        this.agendaService.setEspecialistas(this.mainService.getEspecialistas());
-        this.setAgendaListEspecialistas(this.agendaService.getEspecialistas());
+        this.agendaConsultaService.setEspecialistas(this.mainService.getEspecialistas());
+        this.setAgendaListEspecialistas(this.agendaConsultaService.getEspecialistas());
         this.panelAgendaConsultaAdd.setVisible(false);
         this.panelAgendaConsultaInfo.setVisible(false);
+    }
 
+    private void loadPontoTab() {
+        this.panelFolhaPonto.setVisible(false);
+        this.panelPagamento.setVisible(false);
+        this.panelPontoPagamento.setVisible(false);
+        this.pontoSalarioService.setFuncionarios(this.mainService.getFuncionarios());
+        this.setPontoListFuncionarios(this.pontoSalarioService.getFuncionarios());
+        LocalDate data = LocalDate.now();
+        this.pontoComboAno.setSelectedItem(data.getYear());
+        this.pontoComboMes.setSelectedIndex(data.getMonth().getValue() - 1);
+    }
+
+    private void loadPagamentoTab() {
+        this.fillPagamentosJTable();
+        this.btnPagamentoEditar.setVisible(false);
+        this.btnPagamentoCancelarEdit.setVisible(false);
+        this.btnPagamentoRemover.setVisible(false);
     }
 
     private void setAgendaListEspecialistas(List<Especialista> especialistas) {
@@ -1288,40 +1541,53 @@ public class MainScreen extends javax.swing.JFrame {
         this.especialistasListAgenda.setModel(especialistaModel);
     }
 
+    private void setPontoListFuncionarios(List<Funcionario> funcionarios) {
+        DefaultListModel especialistaModel = new DefaultListModel();
+        for (Funcionario funcionario : funcionarios) {
+            especialistaModel.addElement(funcionario.getNome());
+        }
+        this.funcionarioListPonto.setModel(especialistaModel);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addAgendaCliente;
-    private javax.swing.JFormattedTextField addAgendaData;
+    private com.github.lgooddatepicker.components.DateTimePicker addAgendaData;
     private javax.swing.JTextField addAgendaDescricao;
     private javax.swing.JTextField addConsultaCliente;
     private javax.swing.JFormattedTextField addConsultaValor;
+    private javax.swing.JButton addPagamentoBtn;
+    private javax.swing.JTextField addPagamentoDescricao;
+    private com.github.lgooddatepicker.components.DatePicker addPagamentoDtPagamento;
+    private com.github.lgooddatepicker.components.DatePicker addPagamentoDtVencimento;
+    private javax.swing.JComboBox<String> addPagamentoTipo;
+    private javax.swing.JFormattedTextField addPagamentoValor;
+    private com.github.lgooddatepicker.components.DatePicker addSalarioDtPagamento;
+    private javax.swing.JFormattedTextField addSalarioObservacao;
+    private javax.swing.JFormattedTextField addSalarioValor;
     private javax.swing.JButton btnAddConsulta;
+    private javax.swing.JButton btnAddPagamento;
     private javax.swing.JButton btnAddRegistroAgenda;
+    private javax.swing.JButton btnLoadMesAno;
+    private javax.swing.JButton btnPagamentoCancelarEdit;
+    private javax.swing.JButton btnPagamentoEditar;
+    private javax.swing.JButton btnPagamentoRemover;
     private javax.swing.JButton btnSelectEspecialistaAgenda;
     private javax.swing.JButton btnSelectFuncionario;
+    private com.github.lgooddatepicker.components.DatePicker datePicker4;
+    private com.github.lgooddatepicker.components.DatePicker datePicker5;
     private javax.swing.JList<String> especialistasListAgenda;
-    private javax.swing.JList<String> especialistasListAgenda1;
+    private javax.swing.JList<String> funcionarioListPonto;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
-    private javax.swing.JFormattedTextField jFormattedTextField3;
-    private javax.swing.JFormattedTextField jFormattedTextField4;
-    private javax.swing.JFormattedTextField jFormattedTextField5;
-    private javax.swing.JFormattedTextField jFormattedTextField6;
-    private javax.swing.JFormattedTextField jFormattedTextField7;
+    private javax.swing.JFormattedTextField jFormattedTextField8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1361,6 +1627,8 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1384,13 +1652,8 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane5;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel labelEspecialistaAgendaEmail;
@@ -1400,11 +1663,19 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel labelFuncionarioEmail;
     private javax.swing.JLabel labelFuncionarioFuncao;
     private javax.swing.JLabel labelFuncionarioNome;
+    private javax.swing.JLabel labelPagamentoMesAno;
     private javax.swing.JLabel labelUsername;
     private javax.swing.JPanel panelAgendaConsultaAdd;
     private javax.swing.JPanel panelAgendaConsultaInfo;
-    private javax.swing.JPanel panelAgendaConsultaInfo1;
+    private javax.swing.JPanel panelFolhaPonto;
+    private javax.swing.JPanel panelPagamento;
+    private javax.swing.JPanel panelPontoPagamento;
+    private javax.swing.JComboBox<String> pontoComboAno;
+    private javax.swing.JComboBox<String> pontoComboMes;
     private javax.swing.JTable tableEspecialistaAgenda;
     private javax.swing.JTable tableEspecialistaConsultas;
+    private javax.swing.JTable tableFolhaPonto;
+    private javax.swing.JTable tablePagamentos;
+    private javax.swing.JTable tableSalarios;
     // End of variables declaration//GEN-END:variables
 }

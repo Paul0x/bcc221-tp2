@@ -6,6 +6,7 @@
 package com.bcc221.tp2.projetoclinica.entities;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public class Funcionario  extends Usuario implements Serializable{
     
-    private Map<RegistroSalario, List<RegistroPonto>> pontoSalario;
+    private Map<RegistroSalario, List<RegistroPonto>> pontoSalario = new HashMap<>();
 
     public Funcionario() {
     }

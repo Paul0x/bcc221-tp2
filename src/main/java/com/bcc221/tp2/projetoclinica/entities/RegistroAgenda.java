@@ -7,6 +7,7 @@ package com.bcc221.tp2.projetoclinica.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  *
@@ -16,15 +17,17 @@ public class RegistroAgenda implements Serializable{
     
     Integer codigo;
     LocalDate data;
+    LocalTime hora;
     String descricao;
 
     public RegistroAgenda() {
     }
 
-    public RegistroAgenda(Integer codigo, LocalDate data, String descricao) {
+    public RegistroAgenda(Integer codigo, LocalDate data, LocalTime hora, String descricao) {
         this.codigo = codigo;
         this.data = data;
         this.descricao = descricao;
+        this.hora = hora;
     }
 
     public Integer getCodigo() {
@@ -50,7 +53,13 @@ public class RegistroAgenda implements Serializable{
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
-    
+
+    public LocalTime getHora() {
+        return hora;
+    }
+
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
+    }
     
 }

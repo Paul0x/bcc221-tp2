@@ -7,7 +7,9 @@ package com.bcc221.tp2.projetoclinica.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -19,10 +21,16 @@ public class RegistroSalario implements Serializable {
     private Integer mes;
     private BigDecimal valor;
     private String observacao;
+    private LocalDate dtPagamento;
 
     public RegistroSalario() {
     }
 
+    public RegistroSalario(Integer ano, Integer mes) {
+        this.ano = ano;
+        this.mes = mes;
+    }
+    
     public Integer getAno() {
         return ano;
     }
@@ -54,4 +62,43 @@ public class RegistroSalario implements Serializable {
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
+
+    public LocalDate getDtPagamento() {
+        return dtPagamento;
+    }
+
+    public void setDtPagamento(LocalDate dtPagamento) {
+        this.dtPagamento = dtPagamento;
+    }   
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.ano);
+        hash = 59 * hash + Objects.hashCode(this.mes);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RegistroSalario other = (RegistroSalario) obj;
+        if (!Objects.equals(this.ano, other.ano)) {
+            return false;
+        }
+        if (!Objects.equals(this.mes, other.mes)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }
