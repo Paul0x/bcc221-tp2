@@ -11,7 +11,9 @@ import com.bcc221.tp2.projetoclinica.entities.RegistroAgenda;
 import com.bcc221.tp2.projetoclinica.entities.RegistroConsulta;
 import com.bcc221.tp2.projetoclinica.entities.RegistroPagamento;
 import com.bcc221.tp2.projetoclinica.entities.RegistroSalario;
+import com.bcc221.tp2.projetoclinica.entities.Usuario;
 import com.bcc221.tp2.projetoclinica.services.AgendaConsultaService;
+import com.bcc221.tp2.projetoclinica.services.FileService;
 import com.bcc221.tp2.projetoclinica.services.MainService;
 import com.bcc221.tp2.projetoclinica.services.PagamentoService;
 import com.bcc221.tp2.projetoclinica.services.PontoSalarioService;
@@ -19,11 +21,13 @@ import com.bcc221.tp2.projetoclinica.ui.utils.TabChangeListener;
 import com.github.lgooddatepicker.components.DatePicker;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -85,8 +89,8 @@ public class MainScreen extends javax.swing.JFrame {
         tableEspecialistaConsultas = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableEspecialistaAgenda = new javax.swing.JTable();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnEditAgenda = new javax.swing.JButton();
+        btnEditConsulta = new javax.swing.JButton();
         btnSelectEspecialistaAgenda = new javax.swing.JButton();
         panelAgendaConsultaAdd = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
@@ -103,6 +107,12 @@ public class MainScreen extends javax.swing.JFrame {
         addConsultaValor = new javax.swing.JFormattedTextField();
         jLabel15 = new javax.swing.JLabel();
         addAgendaData = new com.github.lgooddatepicker.components.DateTimePicker();
+        btnAgendaEditar = new javax.swing.JButton();
+        btnAgendaRemover = new javax.swing.JButton();
+        btnAgendaCancelarEdit = new javax.swing.JButton();
+        btnConsultaEditar = new javax.swing.JButton();
+        btnConsultaRemover = new javax.swing.JButton();
+        btnConsultaCancelarEdit = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
@@ -173,7 +183,7 @@ public class MainScreen extends javax.swing.JFrame {
         datePicker5 = new com.github.lgooddatepicker.components.DatePicker();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        tableUsuarios = new javax.swing.JTable();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
@@ -182,14 +192,14 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel39 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jButton8 = new javax.swing.JButton();
+        addUsuarioNome = new javax.swing.JTextField();
+        addUsuarioEmail = new javax.swing.JTextField();
+        addUsuarioLogin = new javax.swing.JTextField();
+        addUsuarioSenha = new javax.swing.JPasswordField();
+        addUsuarioTipo = new javax.swing.JComboBox<>();
+        btnAddUsuario = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        jFormattedTextField8 = new javax.swing.JFormattedTextField();
+        addUsuarioCpf = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -290,9 +300,19 @@ public class MainScreen extends javax.swing.JFrame {
             tableEspecialistaAgenda.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        jButton6.setText("Atualizar Agenda");
+        btnEditAgenda.setText("Selecionar Registro");
+        btnEditAgenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditAgendaActionPerformed(evt);
+            }
+        });
 
-        jButton7.setText("Atualizar Consultas");
+        btnEditConsulta.setText("Selecionar Consulta");
+        btnEditConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditConsultaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelAgendaConsultaInfoLayout = new javax.swing.GroupLayout(panelAgendaConsultaInfo);
         panelAgendaConsultaInfo.setLayout(panelAgendaConsultaInfoLayout);
@@ -326,12 +346,12 @@ public class MainScreen extends javax.swing.JFrame {
                                 .addGroup(panelAgendaConsultaInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton7))
+                                    .addComponent(btnEditConsulta))
                                 .addGap(90, 90, 90))
                             .addComponent(jSeparator1))
                         .addContainerGap())
                     .addGroup(panelAgendaConsultaInfoLayout.createSequentialGroup()
-                        .addComponent(jButton6)
+                        .addComponent(btnEditAgenda)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         panelAgendaConsultaInfoLayout.setVerticalGroup(
@@ -358,8 +378,8 @@ public class MainScreen extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelAgendaConsultaInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6)
-                    .addComponent(jButton7))
+                    .addComponent(btnEditAgenda)
+                    .addComponent(btnEditConsulta))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -401,6 +421,48 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel15.setText("Adicionar Pagamento Consulta");
 
+        btnAgendaEditar.setText("Editar Registro da Agenda");
+        btnAgendaEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgendaEditarActionPerformed(evt);
+            }
+        });
+
+        btnAgendaRemover.setText("Remover Registro");
+        btnAgendaRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgendaRemoverActionPerformed(evt);
+            }
+        });
+
+        btnAgendaCancelarEdit.setText("Cancelar Edição");
+        btnAgendaCancelarEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgendaCancelarEditActionPerformed(evt);
+            }
+        });
+
+        btnConsultaEditar.setText("Editar Pagamento Consulta");
+        btnConsultaEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultaEditarActionPerformed(evt);
+            }
+        });
+
+        btnConsultaRemover.setText("Remover Registro");
+        btnConsultaRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultaRemoverActionPerformed(evt);
+            }
+        });
+
+        btnConsultaCancelarEdit.setText("Cancelar Edição");
+        btnConsultaCancelarEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultaCancelarEditActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelAgendaConsultaAddLayout = new javax.swing.GroupLayout(panelAgendaConsultaAdd);
         panelAgendaConsultaAdd.setLayout(panelAgendaConsultaAddLayout);
         panelAgendaConsultaAddLayout.setHorizontalGroup(
@@ -408,9 +470,6 @@ public class MainScreen extends javax.swing.JFrame {
             .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
-                        .addComponent(btnAddRegistroAgenda)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
                         .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
@@ -428,7 +487,6 @@ public class MainScreen extends javax.swing.JFrame {
                                 .addComponent(jLabel8)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAddConsulta, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAgendaConsultaAddLayout.createSequentialGroup()
                                 .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel12)
@@ -439,12 +497,30 @@ public class MainScreen extends javax.swing.JFrame {
                                     .addComponent(addConsultaValor, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAgendaConsultaAddLayout.createSequentialGroup()
                                 .addComponent(jLabel15)
-                                .addGap(67, 67, 67))))))
+                                .addGap(67, 67, 67))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnAddConsulta)
+                                .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
+                                    .addComponent(btnConsultaRemover)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnConsultaCancelarEdit))
+                                .addComponent(btnConsultaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
+                        .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnAgendaEditar)
+                            .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
+                                .addComponent(btnAgendaRemover)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAgendaCancelarEdit)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelAgendaConsultaAddLayout.createSequentialGroup()
+                        .addComponent(btnAddRegistroAgenda)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         panelAgendaConsultaAddLayout.setVerticalGroup(
             panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAgendaConsultaAddLayout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
+                .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel15))
@@ -474,7 +550,17 @@ public class MainScreen extends javax.swing.JFrame {
                 .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddRegistroAgenda)
                     .addComponent(btnAddConsulta))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgendaEditar)
+                    .addComponent(btnConsultaEditar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelAgendaConsultaAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgendaRemover)
+                    .addComponent(btnAgendaCancelarEdit)
+                    .addComponent(btnConsultaRemover)
+                    .addComponent(btnConsultaCancelarEdit))
+                .addGap(52, 52, 52))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -513,7 +599,7 @@ public class MainScreen extends javax.swing.JFrame {
                         .addComponent(panelAgendaConsultaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelAgendaConsultaAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(150, 150, 150))
+                .addContainerGap())
         );
 
         jTabbedPane5.addTab("Controle de Agenda e Consultas", jPanel1);
@@ -909,10 +995,20 @@ public class MainScreen extends javax.swing.JFrame {
         addPagamentoValor.setValue(0.00);
 
         btnPagamentoRemover.setText("Remover Compra");
+        btnPagamentoRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagamentoRemoverActionPerformed(evt);
+            }
+        });
 
         btnPagamentoCancelarEdit.setText("Cancelar Edição");
 
         btnPagamentoEditar.setText("Editar Compra");
+        btnPagamentoEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagamentoEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1050,7 +1146,7 @@ public class MainScreen extends javax.swing.JFrame {
 
         jTabbedPane5.addTab("Relatórios", jPanel5);
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        tableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -1069,7 +1165,7 @@ public class MainScreen extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane8.setViewportView(jTable4);
+        jScrollPane8.setViewportView(tableUsuarios);
 
         jLabel34.setText("Usuários Cadastrados");
 
@@ -1087,19 +1183,24 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel41.setText("Tipo");
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Especialista", "Assistente Administrativo", "Administrador", "Usuário" }));
+        addUsuarioTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Especialista", "Assistente Administrativo", "Administrador", "Usuário" }));
 
-        jButton8.setText("Adicionar");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        btnAddUsuario.setText("Adicionar");
+        btnAddUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                btnAddUsuarioActionPerformed(evt);
             }
         });
 
-        jButton9.setText("Atualizar");
+        jButton9.setText("Remover Selecionado");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         try {
-            jFormattedTextField8.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+            addUsuarioCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -1117,8 +1218,8 @@ public class MainScreen extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel34)
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1127,7 +1228,7 @@ public class MainScreen extends javax.swing.JFrame {
                                             .addComponent(jLabel36, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel35))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(addUsuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel39)
@@ -1135,20 +1236,20 @@ public class MainScreen extends javax.swing.JFrame {
                                             .addComponent(jLabel41))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jPasswordField1)))
+                                            .addComponent(addUsuarioLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                                            .addComponent(addUsuarioTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(addUsuarioSenha)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel38)
                                             .addComponent(jLabel37))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                                            .addComponent(jFormattedTextField8))))
+                                            .addComponent(addUsuarioEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                                            .addComponent(addUsuarioCpf))))
                                 .addGap(420, 420, 420))
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jButton8)
+                                .addComponent(btnAddUsuario)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         jPanel6Layout.setVerticalGroup(
@@ -1164,29 +1265,29 @@ public class MainScreen extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel36)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addUsuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel37)
-                            .addComponent(jFormattedTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addUsuarioCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel38)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addUsuarioEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel39)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addUsuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel40)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addUsuarioSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel41)
-                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addUsuarioTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jButton8)))
+                        .addComponent(btnAddUsuario)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton9)
                 .addGap(20, 20, 20))
@@ -1227,15 +1328,23 @@ public class MainScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        FileService fileService = new FileService();
+        try {
+            fileService.saveFullFile(this.mainService.getUsuarios(), this.pagamentoService.getPagamentos());
+            JOptionPane.showMessageDialog(null, "Arquivos salvos com sucesso.");
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.dispose();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao salvar arquivo: " + ex.getMessage());
+
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTabbedPane5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane5MouseClicked
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jTabbedPane5MouseClicked
 
     private void btnAddConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddConsultaActionPerformed
-        // TODO add your handling code here:
         /**
          * Adiciona novo registro no pagamento de consultas do Especialista
          */
@@ -1244,13 +1353,13 @@ public class MainScreen extends javax.swing.JFrame {
             Double valor = ((Number) this.addConsultaValor.getValue()).doubleValue();
             this.agendaConsultaService.addRegistroConsulta(cliente, valor);
             this.fillConsultaJTable(this.agendaConsultaService.getCurrentEspecialista().getConsultas());
+            this.clearInputs();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao adicionar: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnAddConsultaActionPerformed
 
     private void btnAddRegistroAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRegistroAgendaActionPerformed
-
         System.out.println("Adicionar agenda");
         /**
          * Adiciona novo registro na agenda do Especialista
@@ -1262,6 +1371,7 @@ public class MainScreen extends javax.swing.JFrame {
             String descricao = this.addAgendaDescricao.getText();
             this.agendaConsultaService.addRegistroAgenda(data, hora, cliente, descricao);
             this.fillAgendaJTable(this.agendaConsultaService.getCurrentEspecialista().getAgenda());
+            this.clearInputs();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao adicionar: " + ex.getMessage());
         }
@@ -1269,7 +1379,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddRegistroAgendaActionPerformed
 
     private void btnSelectEspecialistaAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectEspecialistaAgendaActionPerformed
-
         /**
          * Seleciona o especialista e carrega sua agenda e consultas
          */
@@ -1293,8 +1402,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSelectEspecialistaAgendaActionPerformed
 
     private void btnSelectFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectFuncionarioActionPerformed
-        // TODO add your handling code here:
-
         /**
          * Seleciona o funcionário e carrega suas informações
          */
@@ -1318,30 +1425,43 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSelectFuncionarioActionPerformed
 
     private void addPagamentoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPagamentoBtnActionPerformed
-        // TODO add your handling code here:
         try {
             Double valor = ((Number) this.addSalarioValor.getValue()).doubleValue();
             LocalDate dtPagamento = this.addSalarioDtPagamento.getDate();
             String observacao = this.addSalarioObservacao.getText();
 
             this.pontoSalarioService.addPagamento(valor, dtPagamento, observacao);
+
+            this.clearInputs();
             this.fillSalariosJTable();
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao atualizar: " + ex.getMessage());
         }
 
     }//GEN-LAST:event_addPagamentoBtnActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
+    private void btnAddUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUsuarioActionPerformed
+        try {
+            String nome = this.addUsuarioNome.getText();
+            String email = this.addUsuarioEmail.getText();
+            String cpf = this.addUsuarioCpf.getText();
+            String login = this.addUsuarioLogin.getText();
+            String senha = new String(this.addUsuarioSenha.getPassword());
+            Integer tipo = this.addUsuarioTipo.getSelectedIndex();
+            this.mainService.addUsuario(nome, email, cpf, login, senha, tipo);
+            this.clearInputs();
+            this.fillUsuariosJTable();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao adicionar: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnAddUsuarioActionPerformed
 
     private void pontoComboAnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pontoComboAnoActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_pontoComboAnoActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
         try {
             TableModel model = this.tableFolhaPonto.getModel();
             this.pontoSalarioService.updateFolhaPonto(model);
@@ -1352,7 +1472,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnLoadMesAnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadMesAnoActionPerformed
-        // TODO add your handling code here:
         this.pontoSalarioService.setCurrentAno(new Integer((String) this.pontoComboAno.getSelectedItem()));
         this.pontoSalarioService.setCurrentMes(this.pontoComboMes.getSelectedIndex() + 1);
         this.labelPagamentoMesAno.setText(this.pontoSalarioService.getCurrentMes() + "/" + this.pontoSalarioService.getCurrentAno());
@@ -1361,7 +1480,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoadMesAnoActionPerformed
 
     private void btnAddPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPagamentoActionPerformed
-        // TODO add your handling code here:
         try {
             String descricao = this.addPagamentoDescricao.getText();
             String tipo = (String) this.addPagamentoTipo.getSelectedItem();
@@ -1369,6 +1487,7 @@ public class MainScreen extends javax.swing.JFrame {
             LocalDate dtVencimento = this.addPagamentoDtVencimento.getDate();
             Double valor = ((Number) this.addPagamentoValor.getValue()).doubleValue();
             this.pagamentoService.addPagamento(descricao, tipo, dtPagamento, dtVencimento, valor);
+            this.clearInputs();
             this.fillPagamentosJTable();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao adicionar pagamento: " + ex.getMessage());
@@ -1378,17 +1497,15 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddPagamentoActionPerformed
 
     private void tablePagamentosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablePagamentosKeyReleased
-        // TODO add your handling code here:
         System.out.println(evt.getKeyCode());
-
         evt.getSource();
     }//GEN-LAST:event_tablePagamentosKeyReleased
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
         Integer linhaSelecionada = this.tablePagamentos.getSelectedRow();
         if (linhaSelecionada == -1) {
             JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha para edição");
+            return;
         }
         try {
             TableModel model = this.tablePagamentos.getModel();
@@ -1406,35 +1523,208 @@ public class MainScreen extends javax.swing.JFrame {
             this.btnPagamentoRemover.setVisible(true);
             this.btnAddPagamento.setVisible(false);
             this.pagamentoService.setIsEdicao(true);
+            this.pagamentoService.setIndexEdicao(linhaSelecionada);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao iniciar edição:" + ex.getMessage());
 
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void btnPagamentoEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagamentoEditarActionPerformed
+        this.btnAddPagamentoActionPerformed(null);
+        this.pagamentoService.setIsEdicao(false);
+        this.btnPagamentoEditar.setVisible(false);
+        this.btnPagamentoCancelarEdit.setVisible(false);
+        this.btnPagamentoRemover.setVisible(false);
+        this.btnAddPagamento.setVisible(true);
+    }//GEN-LAST:event_btnPagamentoEditarActionPerformed
+
+    private void btnPagamentoRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagamentoRemoverActionPerformed
+        if (!this.pagamentoService.getIsEdicao()) {
+            JOptionPane.showMessageDialog(null, "Você não está no modo de edição.");
+            return;
+        }
+
+        try {
+            this.pagamentoService.getPagamentos().remove(this.pagamentoService.getIndexEdicao().intValue());
+            this.pagamentoService.setIsEdicao(false);
+            this.btnPagamentoEditar.setVisible(false);
+            this.btnPagamentoCancelarEdit.setVisible(false);
+            this.btnPagamentoRemover.setVisible(false);
+            this.btnAddPagamento.setVisible(true);
+            this.fillPagamentosJTable();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao remover:" + ex.getMessage());
+        }
+        JOptionPane.showMessageDialog(null, "Ítem removido com sucesso.");
+    }//GEN-LAST:event_btnPagamentoRemoverActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        Integer linhaSelecionada = this.tableUsuarios.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha para remoção");
+            return;
+        }
+        try {
+            this.mainService.removeUsuario(linhaSelecionada);
+            this.fillUsuariosJTable();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao remover:" + ex.getMessage());
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void btnEditAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditAgendaActionPerformed
+        Integer linhaSelecionada = this.tableEspecialistaAgenda.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha para edição");
+            return;
+        }
+        try {
+            TableModel model = this.tableEspecialistaAgenda.getModel();
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("d/MM/yyyy HH:mm");
+            this.addAgendaCliente.setText(((String) model.getValueAt(linhaSelecionada, 1)).split(" - ")[0]);
+            this.addAgendaDescricao.setText(((String) model.getValueAt(linhaSelecionada, 1)).split(" - ")[1]);
+            this.addAgendaData.setDateTimePermissive(LocalDateTime.parse((String) model.getValueAt(linhaSelecionada, 0), format));
+
+            this.btnAgendaEditar.setVisible(true);
+            this.btnAgendaCancelarEdit.setVisible(true);
+            this.btnAgendaRemover.setVisible(true);
+            this.btnAddRegistroAgenda.setVisible(false);
+            this.agendaConsultaService.setIsEdicaoAgenda(true);
+            this.agendaConsultaService.setIndexEdicaoAgenda(linhaSelecionada);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao iniciar edição:" + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnEditAgendaActionPerformed
+
+    private void btnAgendaEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaEditarActionPerformed
+        // TODO add your handling code here:
+        this.btnAddRegistroAgendaActionPerformed(null);
+        this.btnAgendaCancelarEditActionPerformed(null);
+
+    }//GEN-LAST:event_btnAgendaEditarActionPerformed
+
+    private void btnAgendaCancelarEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaCancelarEditActionPerformed
+        this.btnAgendaEditar.setVisible(false);
+        this.btnAgendaCancelarEdit.setVisible(false);
+        this.btnAgendaRemover.setVisible(false);
+        this.btnAddRegistroAgenda.setVisible(true);
+        this.agendaConsultaService.setIsEdicaoAgenda(false);
+    }//GEN-LAST:event_btnAgendaCancelarEditActionPerformed
+
+    private void btnEditConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditConsultaActionPerformed
+        Integer linhaSelecionada = this.tableEspecialistaConsultas.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha para edição");
+            return;
+        }
+        try {
+            TableModel model = this.tableEspecialistaConsultas.getModel();
+            this.addConsultaCliente.setText((String) model.getValueAt(linhaSelecionada, 0));
+            // Remove o cifrão
+            String doubleStr = (String) model.getValueAt(linhaSelecionada, 1);
+            doubleStr = doubleStr.substring(3);
+            this.addConsultaValor.setValue(new Double(doubleStr));
+            this.btnConsultaEditar.setVisible(true);
+            this.btnConsultaCancelarEdit.setVisible(true);
+            this.btnConsultaRemover.setVisible(true);
+            this.btnAddConsulta.setVisible(false);
+            this.agendaConsultaService.setIsEdicaoConsulta(true);
+            this.agendaConsultaService.setIndexEdicaoConsulta(linhaSelecionada);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao iniciar edição:" + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnEditConsultaActionPerformed
+
+    private void btnConsultaCancelarEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaCancelarEditActionPerformed
+        this.btnConsultaEditar.setVisible(false);
+        this.btnConsultaCancelarEdit.setVisible(false);
+        this.btnConsultaRemover.setVisible(false);
+        this.btnAddConsulta.setVisible(true);
+        this.agendaConsultaService.setIsEdicaoConsulta(false);
+    }//GEN-LAST:event_btnConsultaCancelarEditActionPerformed
+
+    private void btnConsultaEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaEditarActionPerformed
+        // TODO add your handling code here:
+        this.btnAddConsultaActionPerformed(null);
+        this.btnConsultaCancelarEditActionPerformed(null);
+    }//GEN-LAST:event_btnConsultaEditarActionPerformed
+
+    private void btnAgendaRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaRemoverActionPerformed
+        this.agendaConsultaService.getCurrentEspecialista().getAgenda().remove(this.agendaConsultaService.getIndexEdicaoAgenda().intValue());
+        this.fillAgendaJTable(this.agendaConsultaService.getCurrentEspecialista().getAgenda());
+        clearInputs();
+        this.btnAgendaCancelarEditActionPerformed(null);
+    }//GEN-LAST:event_btnAgendaRemoverActionPerformed
+
+    private void btnConsultaRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaRemoverActionPerformed
+        this.agendaConsultaService.getCurrentEspecialista().getConsultas().remove(this.agendaConsultaService.getIndexEdicaoConsulta().intValue());
+        this.fillConsultaJTable(this.agendaConsultaService.getCurrentEspecialista().getConsultas());
+        clearInputs();
+        this.btnConsultaCancelarEditActionPerformed(null);
+    }//GEN-LAST:event_btnConsultaRemoverActionPerformed
+
+    private void clearInputs() {
+        // Pagamento
+        this.addPagamentoDescricao.setText("");
+        this.addPagamentoDtPagamento.setDate(LocalDate.now());
+        this.addPagamentoDtVencimento.setDate(LocalDate.now());
+        this.addPagamentoValor.setValue(0.0);
+
+        // Salário
+        this.addSalarioValor.setValue(0);
+        this.addSalarioObservacao.setText("");
+        this.addSalarioDtPagamento.setDate(LocalDate.now());
+
+        // Agenda
+        this.addAgendaData.setDateTimePermissive(LocalDateTime.now());
+        this.addAgendaCliente.setText("");
+        this.addAgendaDescricao.setText("");
+
+        // Consulta
+        this.addConsultaValor.setValue(0.0);
+        this.addConsultaCliente.setText("");
+
+        // Usuario
+        this.addUsuarioCpf.setText("");
+        this.addUsuarioEmail.setText("");
+        this.addUsuarioLogin.setText("");
+        this.addUsuarioNome.setText("");
+        this.addUsuarioTipo.setSelectedIndex(0);
+        this.addUsuarioSenha.setText("");
+    }
+
     private void fillAgendaJTable(List<RegistroAgenda> agenda) {
-        Object[][] array = new Object[agenda.size()][3];
+        Object[][] array = new Object[agenda.size()][2];
         int i = 0;
         for (RegistroAgenda registro : agenda) {
             array[i][0] = registro.getData().format(DateTimeFormatter.ofPattern("dd/MM/YYYY")) + " " + registro.getHora().format(DateTimeFormatter.ofPattern("HH:mm"));
             array[i][1] = registro.getDescricao();
-            array[i][2] = "Remover";
             i++;
         }
-        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Data", "Nome/Desc", "-"});
+        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Data", "Nome/Desc"}) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
         this.tableEspecialistaAgenda.setModel(model);
     }
 
     private void fillConsultaJTable(List<RegistroConsulta> consultas) {
-        Object[][] array = new Object[consultas.size()][3];
+        Object[][] array = new Object[consultas.size()][2];
         int i = 0;
         for (RegistroConsulta registro : consultas) {
             array[i][0] = registro.getCliente();
             array[i][1] = "R$ " + registro.getValor();
-            array[i][2] = "Remover";
             i++;
         }
-        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Cliente", "Valor", "-"});
+        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Cliente", "Valor"}) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
         this.tableEspecialistaConsultas.setModel(model);
     }
 
@@ -1454,7 +1744,6 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     private void fillSalariosJTable() {
-
         List<RegistroSalario> salarios = this.pontoSalarioService.getCurrentSalarioList();
 
         Object[][] array = new Object[salarios.size()][4];
@@ -1466,12 +1755,16 @@ public class MainScreen extends javax.swing.JFrame {
                 array[i][3] = salarios.get(i).getObservacao();
             }
         }
-        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Mês/Ano", "Data", "Valor", "Observação"});
+        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Mês/Ano", "Data", "Valor", "Observação"}) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
         this.tableSalarios.setModel(model);
     }
 
     private void fillPagamentosJTable() {
-
         List<RegistroPagamento> pagamentos = this.pagamentoService.getPagamentos();
 
         Object[][] array = new Object[pagamentos.size()][5];
@@ -1482,8 +1775,33 @@ public class MainScreen extends javax.swing.JFrame {
             array[i][3] = "R$ " + pagamentos.get(i).getValor();
             array[i][4] = pagamentos.get(i).getTipo();
         }
-        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Descrição", "Dt. Pagamento", "Dt. Vencimento", "Valor", "Tipo"});
+        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Descrição", "Dt. Pagamento", "Dt. Vencimento", "Valor", "Tipo"}) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
         this.tablePagamentos.setModel(model);
+    }
+
+    private void fillUsuariosJTable() {
+        List<Usuario> usuarios = this.mainService.getUsuarios();
+
+        Object[][] array = new Object[usuarios.size()][5];
+        for (int i = 0; i < usuarios.size(); i++) {
+            array[i][0] = usuarios.get(i).getNome();
+            array[i][1] = usuarios.get(i).getCpf();
+            array[i][2] = usuarios.get(i).getEmail();
+            array[i][3] = usuarios.get(i).getLogin();
+            array[i][4] = usuarios.get(i).getClass().getSimpleName();
+        }
+        DefaultTableModel model = new DefaultTableModel(array, new String[]{"Nome", "CPF", "Email", "Login", "Tipo"}) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
+        this.tableUsuarios.setModel(model);
     }
 
     private void initScreen() {
@@ -1492,9 +1810,32 @@ public class MainScreen extends javax.swing.JFrame {
         this.agendaConsultaService = new AgendaConsultaService();
         this.pontoSalarioService = new PontoSalarioService();
         this.pagamentoService = new PagamentoService();
+
+        // Valida Permissões
+        if (!this.mainService.getCurrentUsuario().getPermissoes().isAgendaConsulta()) {
+            this.jTabbedPane5.setEnabledAt(0, false);
+        }
+        if (!this.mainService.getCurrentUsuario().getPermissoes().isPontoSalario()) {
+            this.jTabbedPane5.setEnabledAt(1, false);
+        }
+        if (!this.mainService.getCurrentUsuario().getPermissoes().isPagamento()) {
+            this.jTabbedPane5.setEnabledAt(2, false);
+        }
+        if (!this.mainService.getCurrentUsuario().getPermissoes().isRelatorio()) {
+            this.jTabbedPane5.setEnabledAt(3, false);
+        }
+        if (!this.mainService.getCurrentUsuario().getPermissoes().isUsuarios()) {
+            this.jTabbedPane5.setEnabledAt(4, false);
+        }
     }
 
     public void loadMainMenuIndex(Integer index) {
+        FileService fileService = new FileService();
+        try {
+            fileService.saveFullFile(this.mainService.getUsuarios(), this.pagamentoService.getPagamentos());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao salvar seus dados em arquivo." + ex.getMessage());
+        }
         switch (index) {
             case 0:
                 this.loadAgendaTab();
@@ -1505,7 +1846,14 @@ public class MainScreen extends javax.swing.JFrame {
             case 2:
                 this.loadPagamentoTab();
                 break;
+            case 4:
+                this.loadUsuarioTab();
+                break;
         }
+    }
+
+    private void loadUsuarioTab() {
+        this.fillUsuariosJTable();
     }
 
     private void loadAgendaTab() {
@@ -1513,6 +1861,8 @@ public class MainScreen extends javax.swing.JFrame {
         this.setAgendaListEspecialistas(this.agendaConsultaService.getEspecialistas());
         this.panelAgendaConsultaAdd.setVisible(false);
         this.panelAgendaConsultaInfo.setVisible(false);
+        this.btnAgendaCancelarEditActionPerformed(null);
+        this.btnConsultaCancelarEditActionPerformed(null);
     }
 
     private void loadPontoTab() {
@@ -1564,9 +1914,24 @@ public class MainScreen extends javax.swing.JFrame {
     private com.github.lgooddatepicker.components.DatePicker addSalarioDtPagamento;
     private javax.swing.JFormattedTextField addSalarioObservacao;
     private javax.swing.JFormattedTextField addSalarioValor;
+    private javax.swing.JFormattedTextField addUsuarioCpf;
+    private javax.swing.JTextField addUsuarioEmail;
+    private javax.swing.JTextField addUsuarioLogin;
+    private javax.swing.JTextField addUsuarioNome;
+    private javax.swing.JPasswordField addUsuarioSenha;
+    private javax.swing.JComboBox<String> addUsuarioTipo;
     private javax.swing.JButton btnAddConsulta;
     private javax.swing.JButton btnAddPagamento;
     private javax.swing.JButton btnAddRegistroAgenda;
+    private javax.swing.JButton btnAddUsuario;
+    private javax.swing.JButton btnAgendaCancelarEdit;
+    private javax.swing.JButton btnAgendaEditar;
+    private javax.swing.JButton btnAgendaRemover;
+    private javax.swing.JButton btnConsultaCancelarEdit;
+    private javax.swing.JButton btnConsultaEditar;
+    private javax.swing.JButton btnConsultaRemover;
+    private javax.swing.JButton btnEditAgenda;
+    private javax.swing.JButton btnEditConsulta;
     private javax.swing.JButton btnLoadMesAno;
     private javax.swing.JButton btnPagamentoCancelarEdit;
     private javax.swing.JButton btnPagamentoEditar;
@@ -1581,13 +1946,8 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JFormattedTextField jFormattedTextField8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1640,7 +2000,6 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1652,10 +2011,6 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane5;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel labelEspecialistaAgendaEmail;
     private javax.swing.JLabel labelEspecialistaCpf;
     private javax.swing.JLabel labelEspecialistaNome;
@@ -1677,5 +2032,6 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JTable tableFolhaPonto;
     private javax.swing.JTable tablePagamentos;
     private javax.swing.JTable tableSalarios;
+    private javax.swing.JTable tableUsuarios;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,9 +19,9 @@ public class LoginScreen extends javax.swing.JFrame {
     public LoginScreen(MainService mainService) {
         this.mainService = mainService;
         initComponents();
-        this.mainService.login("admin", "admin");
+//        this.mainService.login("admin", "admin");
         this.setVisible(false);
-        new MainScreen(this.mainService).setVisible(true);
+//        new MainScreen(this.mainService).setVisible(true);
     }
 
     /**

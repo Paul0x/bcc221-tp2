@@ -34,34 +34,57 @@ public class PagamentoService {
 
     private List<RegistroPagamento> pagamentos = new ArrayList<>();
     private Boolean isEdicao = false;
-    
+    private Integer indexEdicao;
+
     public PagamentoService() {
-    }    
-    
-    public void addPagamento(String descricao, String tipo, LocalDate dtPagamento, LocalDate dtVencimento, Double valor) throws Exception{
-       
-        if(descricao.trim().equals("")) {
+        initPagamentos();
+    }
+
+    private void initPagamentos() {
+        FileService fileService = new FileService();
+        try {
+            this.setPagamentos(fileService.readPagamentosFile());
+        } catch (Exception ex) {
+            this.pagamentos = new ArrayList<>();
+        }
+    }
+
+    public void addPagamento(String descricao, String tipo, LocalDate dtPagamento, LocalDate dtVencimento, Double valorDouble) throws Exception {
+
+        if (descricao.trim().equals("")) {
             throw new Exception("É necessário inserir a descrição.");
         }
-        if(dtPagamento == null) {
-            throw new Exception("Data de pagamento inválida.");            
+        if (dtPagamento == null) {
+            throw new Exception("Data de pagamento inválida.");
         }
-        if(dtPagamento == null) {
-            throw new Exception("Data de vencimento inválida.");            
+        if (dtPagamento == null) {
+            throw new Exception("Data de vencimento inválida.");
         }
-        if(tipo == null) {
-            throw new Exception("Tipo inválido.");            
+        if (tipo == null) {
+            throw new Exception("Tipo inválido.");
         }
-        if(valor <= 0) {
-            throw new Exception("O valor precisa ser maior que zero.");
-        }
+        
         RegistroPagamento pagamento = new RegistroPagamento();
         pagamento.setDescricao(descricao);
         pagamento.setTipo(tipo);
         pagamento.setDataPagamento(dtPagamento);
         pagamento.setDataVencimento(dtVencimento);
-        pagamento.setValor(new BigDecimal(valor));
-        pagamentos.add(pagamento);
+        BigDecimal valor;
+        try {
+            valor = new BigDecimal(valorDouble);
+        } catch (NumberFormatException ex) {
+            throw new Exception("Insira um número válido para o valor.");
+        }
+        valor = valor.setScale(2, ROUND_HALF_EVEN);
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new Exception("Não é possível inserir um valor de consulta menor que zero.");
+        }
+        pagamento.setValor(valor);
+        if (this.getIsEdicao() == false) {
+            pagamentos.add(pagamento);
+        } else {
+            pagamentos.set(this.getIndexEdicao(), pagamento);
+        }
     }
 
     public List<RegistroPagamento> getPagamentos() {
@@ -79,7 +102,13 @@ public class PagamentoService {
     public void setIsEdicao(Boolean isEdicao) {
         this.isEdicao = isEdicao;
     }
-    
-    
-}
 
+    public Integer getIndexEdicao() {
+        return indexEdicao;
+    }
+
+    public void setIndexEdicao(Integer indexEdicao) {
+        this.indexEdicao = indexEdicao;
+    }
+
+}

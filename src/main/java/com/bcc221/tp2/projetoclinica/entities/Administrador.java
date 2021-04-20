@@ -5,10 +5,25 @@
  */
 package com.bcc221.tp2.projetoclinica.entities;
 
+import com.bcc221.tp2.projetoclinica.enums.Permissoes;
+
 /**
  *
  * @author paulo
  */
 public class Administrador extends Usuario{
+    
+    private Permissoes permissoes = Permissoes.ADMINSTRADOR;
+
+    @Override
+    public Permissoes getPermissoes() {
+        return permissoes;
+    }
+
+    @Override
+    public void setPermissoes(Permissoes permissoes) {
+        this.permissoes = permissoes;
+    }
+    
     
 }

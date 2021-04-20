@@ -7,6 +7,7 @@ package com.bcc221.tp2.projetoclinica.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
@@ -60,6 +61,10 @@ public class RegistroAgenda implements Serializable{
 
     public void setHora(LocalTime hora) {
         this.hora = hora;
+    }
+    
+    public LocalDateTime getDateTime() {
+        return LocalDateTime.of(this.getData(), this.getHora());
     }
     
 }

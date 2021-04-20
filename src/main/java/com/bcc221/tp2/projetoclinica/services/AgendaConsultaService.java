@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,6 +25,10 @@ public class AgendaConsultaService {
 
     private Especialista currentEspecialista = null;
     private List<Especialista> especialistas;
+    private Boolean isEdicaoAgenda = false;
+    private Boolean isEdicaoConsulta = false;
+    private Integer indexEdicaoAgenda;
+    private Integer indexEdicaoConsulta;
 
     public AgendaConsultaService() {
     }
@@ -42,6 +47,38 @@ public class AgendaConsultaService {
 
     public void setEspecialistas(List<Especialista> especialistas) {
         this.especialistas = especialistas;
+    }
+
+    public Boolean getIsEdicaoAgenda() {
+        return isEdicaoAgenda;
+    }
+
+    public void setIsEdicaoAgenda(Boolean isEdicaoAgenda) {
+        this.isEdicaoAgenda = isEdicaoAgenda;
+    }
+
+    public Boolean getIsEdicaoConsulta() {
+        return isEdicaoConsulta;
+    }
+
+    public void setIsEdicaoConsulta(Boolean isEdicaoConsulta) {
+        this.isEdicaoConsulta = isEdicaoConsulta;
+    }
+
+    public Integer getIndexEdicaoAgenda() {
+        return indexEdicaoAgenda;
+    }
+
+    public void setIndexEdicaoAgenda(Integer indexEdicaoAgenda) {
+        this.indexEdicaoAgenda = indexEdicaoAgenda;
+    }
+
+    public Integer getIndexEdicaoConsulta() {
+        return indexEdicaoConsulta;
+    }
+
+    public void setIndexEdicaoConsulta(Integer indexEdicaoConsulta) {
+        this.indexEdicaoConsulta = indexEdicaoConsulta;
     }
 
     public void addRegistroAgenda(LocalDate data, LocalTime hora, String cliente, String descricao) throws Exception {
@@ -67,15 +104,22 @@ public class AgendaConsultaService {
         registro.setDescricao(cliente + " - " + descricao);
 
         // TODO: Ordenar agenda por data
-        this.currentEspecialista.getAgenda().add(registro);
+        if (!this.getIsEdicaoAgenda()) {
+            this.currentEspecialista.getAgenda().add(registro);
+        } else {
+            this.currentEspecialista.getAgenda().set(this.indexEdicaoAgenda, registro);
+        }
+        
+        this.currentEspecialista.getAgenda().sort(Comparator.comparing(RegistroAgenda::getDateTime));
 
     }
 
     public Boolean validaDataAgenda(LocalDate data, LocalTime hora) {
         LocalDateTime dtTime = LocalDateTime.of(data, hora);
         return this.currentEspecialista.getAgenda().stream().anyMatch(
-                r -> LocalDateTime.of(r.getData(), r.getHora()).equals(dtTime)
-        );
+                r -> r.getDateTime().equals(dtTime) 
+                        && (this.getIsEdicaoAgenda() == false || !r.getDateTime().equals(this.currentEspecialista.getAgenda().get(this.getIndexEdicaoAgenda()).getDateTime())
+                                ));
     }
 
     public void addRegistroConsulta(String cliente, Double valorDouble) throws Exception {
@@ -87,14 +131,14 @@ public class AgendaConsultaService {
         if (cliente.trim().equals("")) {
             throw new Exception("O campo cliente é obrigatório.");
         }
-        
+
         try {
             valor = new BigDecimal(valorDouble);
         } catch (NumberFormatException ex) {
             throw new Exception("Insira um número válido para o valor.");
         }
-        
-        valor = valor.setScale(2, ROUND_HALF_EVEN);        
+
+        valor = valor.setScale(2, ROUND_HALF_EVEN);
         if (valor.compareTo(BigDecimal.ZERO) <= 0) {
             throw new Exception("Não é possível inserir um valor de consulta menor que zero.");
         }
@@ -106,8 +150,11 @@ public class AgendaConsultaService {
         registro.setValor(valor);
 
         // TODO: Ordenar agenda por data
-        this.currentEspecialista.getConsultas().add(registro);
-
+        if (!this.getIsEdicaoConsulta()) {
+            this.currentEspecialista.getConsultas().add(registro);
+        } else {
+            this.currentEspecialista.getConsultas().set(this.getIndexEdicaoConsulta(), registro);
+        }
     }
 
 }

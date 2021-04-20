@@ -5,6 +5,7 @@
  */
 package com.bcc221.tp2.projetoclinica.entities;
 
+import com.bcc221.tp2.projetoclinica.enums.Permissoes;
 import java.io.Serializable;
 
 /**
@@ -13,6 +14,7 @@ import java.io.Serializable;
  */
 public class Usuario implements Serializable {
     
+    public  Permissoes permissoes = Permissoes.USUARIO;
     private Integer codigo;
     private String nome;
     private String cpf;
@@ -114,6 +116,14 @@ public class Usuario implements Serializable {
      */
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public Permissoes getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(Permissoes permissoes) {
+        this.permissoes = permissoes;
     }
     
     
