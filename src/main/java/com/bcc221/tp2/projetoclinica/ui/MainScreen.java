@@ -17,6 +17,7 @@ import com.bcc221.tp2.projetoclinica.services.FileService;
 import com.bcc221.tp2.projetoclinica.services.MainService;
 import com.bcc221.tp2.projetoclinica.services.PagamentoService;
 import com.bcc221.tp2.projetoclinica.services.PontoSalarioService;
+import com.bcc221.tp2.projetoclinica.services.RelatoriosService;
 import com.bcc221.tp2.projetoclinica.ui.utils.TabChangeListener;
 import com.github.lgooddatepicker.components.DatePicker;
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -43,7 +45,8 @@ import javax.swing.table.TableModel;
  */
 public class MainScreen extends javax.swing.JFrame {
 
-    private MainService mainService;
+    private final MainService mainService;
+    private RelatoriosService relatoriosService;
     private AgendaConsultaService agendaConsultaService;
     private PontoSalarioService pontoSalarioService;
     private PagamentoService pagamentoService;
@@ -177,10 +180,12 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel42 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
-        jButton10 = new javax.swing.JButton();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        datePicker4 = new com.github.lgooddatepicker.components.DatePicker();
-        datePicker5 = new com.github.lgooddatepicker.components.DatePicker();
+        btnGerarRelatorio = new javax.swing.JButton();
+        comboTipoRelatorio = new javax.swing.JComboBox<>();
+        relatorioDtInicio = new com.github.lgooddatepicker.components.DatePicker();
+        relatorioDtFim = new com.github.lgooddatepicker.components.DatePicker();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        tableRelatorios = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
         tableUsuarios = new javax.swing.JTable();
@@ -1100,9 +1105,27 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel44.setText("Data de Fim:");
 
-        jButton10.setText("Gerar");
+        btnGerarRelatorio.setText("Gerar");
+        btnGerarRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerarRelatorioActionPerformed(evt);
+            }
+        });
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Relatório de Pagamentos", "Relatório de Gastos", "Relatório de Salários" }));
+        comboTipoRelatorio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Relatório de Pagamentos", "Relatório de Gastos", "Relatório de Salários" }));
+
+        tableRelatorios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane9.setViewportView(tableRelatorios);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1111,7 +1134,8 @@ public class MainScreen extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton10)
+                    .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 1126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGerarRelatorio)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel42)
@@ -1119,10 +1143,10 @@ public class MainScreen extends javax.swing.JFrame {
                             .addComponent(jLabel44))
                         .addGap(54, 54, 54)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(datePicker4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(datePicker5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(686, Short.MAX_VALUE))
+                            .addComponent(comboTipoRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(relatorioDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(relatorioDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1130,18 +1154,20 @@ public class MainScreen extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel42)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboTipoRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel43)
-                    .addComponent(datePicker4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(relatorioDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel44)
-                    .addComponent(datePicker5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(relatorioDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton10)
-                .addGap(100, 100, 100))
+                .addComponent(btnGerarRelatorio)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jTabbedPane5.addTab("Relatórios", jPanel5);
@@ -1664,6 +1690,48 @@ public class MainScreen extends javax.swing.JFrame {
         this.btnConsultaCancelarEditActionPerformed(null);
     }//GEN-LAST:event_btnConsultaRemoverActionPerformed
 
+    private void btnGerarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarRelatorioActionPerformed
+        Integer tipoRelatorio = this.comboTipoRelatorio.getSelectedIndex();
+        LocalDate dtInicio = this.relatorioDtInicio.getDate();
+        LocalDate dtFim = this.relatorioDtFim.getDate();
+
+        List<String[]> relatorio = new ArrayList<>();
+        String[] headerStr = {};
+        switch (tipoRelatorio) {
+            case 0:
+                relatorio = this.relatoriosService.gerarRelatorioConsultas(this.mainService.getEspecialistas(), dtInicio, dtFim);
+                headerStr = new String[]{"Data","Descrição","Valor","Tipo"};
+                break;
+            case 1:
+                relatorio = this.relatoriosService.gerarRelatorioPagamento(this.pagamentoService.getPagamentos(), dtInicio, dtFim);
+                headerStr = new String[]{"Data","Cliente","Valor","Especialista"};
+                break;
+            case 2:
+                relatorio = this.relatoriosService.gerarRelatorioSalarios(this.mainService.getFuncionarios(), dtInicio, dtFim);
+                headerStr = new String[]{"Mês/Ano","Nome","Valor"};
+                break;
+        }
+
+        if(relatorio.size() == 0) {
+            return;
+        }
+        Object[][] array = new Object[relatorio.size()][relatorio.get(0).length];
+        int i = 0;
+        int j = 0;
+        for (i = 0; i < relatorio.size(); i++) {
+            for (j = 0; j < relatorio.get(i).length; j++) {
+                array[i][j] = relatorio.get(i)[j];
+            }
+        }
+        DefaultTableModel model = new DefaultTableModel(array, headerStr) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
+        this.tableRelatorios.setModel(model);
+    }//GEN-LAST:event_btnGerarRelatorioActionPerformed
+
     private void clearInputs() {
         // Pagamento
         this.addPagamentoDescricao.setText("");
@@ -1846,6 +1914,9 @@ public class MainScreen extends javax.swing.JFrame {
             case 2:
                 this.loadPagamentoTab();
                 break;
+            case 3:
+                this.loadRelatoriosTab();
+                break;
             case 4:
                 this.loadUsuarioTab();
                 break;
@@ -1854,6 +1925,10 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void loadUsuarioTab() {
         this.fillUsuariosJTable();
+    }
+
+    private void loadRelatoriosTab() {
+        this.relatoriosService = new RelatoriosService();
     }
 
     private void loadAgendaTab() {
@@ -1932,22 +2007,20 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnConsultaRemover;
     private javax.swing.JButton btnEditAgenda;
     private javax.swing.JButton btnEditConsulta;
+    private javax.swing.JButton btnGerarRelatorio;
     private javax.swing.JButton btnLoadMesAno;
     private javax.swing.JButton btnPagamentoCancelarEdit;
     private javax.swing.JButton btnPagamentoEditar;
     private javax.swing.JButton btnPagamentoRemover;
     private javax.swing.JButton btnSelectEspecialistaAgenda;
     private javax.swing.JButton btnSelectFuncionario;
-    private com.github.lgooddatepicker.components.DatePicker datePicker4;
-    private com.github.lgooddatepicker.components.DatePicker datePicker5;
+    private javax.swing.JComboBox<String> comboTipoRelatorio;
     private javax.swing.JList<String> especialistasListAgenda;
     private javax.swing.JList<String> funcionarioListPonto;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2008,6 +2081,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane5;
@@ -2027,10 +2101,13 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPanel panelPontoPagamento;
     private javax.swing.JComboBox<String> pontoComboAno;
     private javax.swing.JComboBox<String> pontoComboMes;
+    private com.github.lgooddatepicker.components.DatePicker relatorioDtFim;
+    private com.github.lgooddatepicker.components.DatePicker relatorioDtInicio;
     private javax.swing.JTable tableEspecialistaAgenda;
     private javax.swing.JTable tableEspecialistaConsultas;
     private javax.swing.JTable tableFolhaPonto;
     private javax.swing.JTable tablePagamentos;
+    private javax.swing.JTable tableRelatorios;
     private javax.swing.JTable tableSalarios;
     private javax.swing.JTable tableUsuarios;
     // End of variables declaration//GEN-END:variables
