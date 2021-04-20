@@ -1,15 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.bcc221.tp2.projetoclinica.main;
 
 import com.bcc221.tp2.projetoclinica.services.MainService;
 import com.bcc221.tp2.projetoclinica.ui.LoginScreen;
 
 /**
- *
+ * Classe principal do sistema.
+ * Utilizada para inicializar o swing e também o serviço principal.
  * @author ufop
  */
 public class MainClass {
@@ -44,7 +40,7 @@ public class MainClass {
         /* Cria o service principal do código */
         MainService mainService = new MainService();
                 
-        /* Create and display the form */
+        /* Inicializa o formulário */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new LoginScreen(mainService).setVisible(true);

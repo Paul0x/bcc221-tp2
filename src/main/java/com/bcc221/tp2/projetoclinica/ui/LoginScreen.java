@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.bcc221.tp2.projetoclinica.ui;
 
 import com.bcc221.tp2.projetoclinica.services.MainService;
@@ -16,12 +11,14 @@ public class LoginScreen extends javax.swing.JFrame {
 
     private MainService mainService;
 
+    /**
+     * Inicializa a tela de login
+     * @param mainService
+     */
     public LoginScreen(MainService mainService) {
         this.mainService = mainService;
         initComponents();
-//        this.mainService.login("admin", "admin");
         this.setVisible(false);
-//        new MainScreen(this.mainService).setVisible(true);
     }
 
     /**
@@ -69,12 +66,6 @@ public class LoginScreen extends javax.swing.JFrame {
         jLabel2.setText("Login");
 
         jLabel3.setText("Senha");
-
-        textFieldLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textFieldLoginActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -136,19 +127,21 @@ public class LoginScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Realiza a ação caso o botão de login seja pressionado
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Valida se o login e senha estão coretos
         if (this.mainService.login(textFieldLogin.getText(),
                 new String(textFieldSenha.getPassword()))) {
             this.setVisible(false);
+            // Inicializa panel principal
             new MainScreen(this.mainService).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Não foi possível realizar o login: login ou senha incorretos.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void textFieldLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textFieldLoginActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

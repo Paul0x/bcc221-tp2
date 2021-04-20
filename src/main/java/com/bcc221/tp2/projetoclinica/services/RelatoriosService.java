@@ -27,7 +27,7 @@ public class RelatoriosService {
 
     public List<String[]> gerarRelatorioPagamento(List<RegistroPagamento> pagamentosFull, LocalDate dtInicio, LocalDate dtFim) {
         List<String[]> pagamentos = new ArrayList<>();
-
+        
         pagamentosFull.stream().filter(pagamento -> (pagamento.getDataPagamento().isAfter(dtInicio) && pagamento.getDataPagamento().isBefore(dtFim))).forEachOrdered(pagamento -> {
             String[] arr = {pagamento.getDataPagamento().format(DateTimeFormatter.ofPattern("dd/MM/YYYY")), pagamento.getDescricao(), "R$ " + pagamento.getValor().toString(), pagamento.getTipo()};
             pagamentos.add(arr);

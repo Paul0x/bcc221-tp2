@@ -1,19 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.bcc221.tp2.projetoclinica.entities;
 
 import com.bcc221.tp2.projetoclinica.enums.Permissoes;
 import java.io.Serializable;
 
 /**
- *
+ * Representação da classe usuário
  * @author paulo
  */
 public class Usuario implements Serializable {
     
+    /**
+     * Enum de permissões e variáveis da classe
+     */
     public  Permissoes permissoes = Permissoes.USUARIO;
     private Integer codigo;
     private String nome;
@@ -22,9 +20,21 @@ public class Usuario implements Serializable {
     private String senha;
     private String login;
 
+    /**
+     * Construtor dvazio
+     */
     public Usuario() {
     }
     
+    /**
+     * Construtor com parâmetros
+     * @param codigo
+     * @param nome
+     * @param cpf
+     * @param email
+     * @param senha
+     * @param login
+     */
     public Usuario(Integer codigo, String nome, String cpf, String email, String senha, String login) {
         this.codigo = codigo;
         this.nome = nome;
@@ -118,10 +128,18 @@ public class Usuario implements Serializable {
         this.login = login;
     }
 
+    /**
+     * Getter permissões
+     * @return
+     */
     public Permissoes getPermissoes() {
         return permissoes;
     }
 
+    /**
+     * Setter permissões
+     * @param permissoes
+     */
     public void setPermissoes(Permissoes permissoes) {
         this.permissoes = permissoes;
     }

@@ -10,6 +10,7 @@ com/bcc221/tp2/projetoclinica/services/MainService.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$19.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$2.class
 com/bcc221/tp2/projetoclinica/entities/Administrador.class
+com/bcc221/tp2/projetoclinica/ui/MainScreen$39.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$29.class
 com/bcc221/tp2/projetoclinica/entities/RegistroSalario.class
 com/bcc221/tp2/projetoclinica/services/FileService.class
@@ -21,6 +22,7 @@ com/bcc221/tp2/projetoclinica/ui/utils/TabChangeListener.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$24.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$18.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$32.class
+com/bcc221/tp2/projetoclinica/ui/MainScreen$38.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$9.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$12.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$3.class
@@ -43,11 +45,12 @@ com/bcc221/tp2/projetoclinica/entities/RegistroAgenda.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$36.class
 com/bcc221/tp2/projetoclinica/entities/Usuario.class
 com/bcc221/tp2/projetoclinica/services/PagamentoService.class
+com/bcc221/tp2/projetoclinica/enums/Permissoes.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$16.class
+com/bcc221/tp2/projetoclinica/services/RelatoriosService.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$34.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$14.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$4.class
-com/bcc221/tp2/projetoclinica/ui/LoginScreen$2.class
 com/bcc221/tp2/projetoclinica/ui/MainScreen$8.class
 com/bcc221/tp2/projetoclinica/entities/Funcionario.class
 com/bcc221/tp2/projetoclinica/entities/RegistroConsulta.class

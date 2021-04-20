@@ -40,7 +40,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
- *
+ * Classe da tela principal
+ * Realiza toda a comunicação entre a interface e os serviços do sistema
  * @author ufop
  */
 public class MainScreen extends javax.swing.JFrame {
@@ -53,11 +54,16 @@ public class MainScreen extends javax.swing.JFrame {
 
     /**
      * Creates new form MainScreen
+     * @param mainService
      */
     public MainScreen(MainService mainService) {
+        // Inicializa o serviço principal
         this.mainService = mainService;
+        // Inicializa os compnentes e a tela
         initComponents();
         initScreen();
+        
+        // Carrega as informações da aba principal
         loadAgendaTab();
     }
 
@@ -1452,6 +1458,9 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void addPagamentoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPagamentoBtnActionPerformed
         try {
+            /**
+             * Adiciona novo pagamento
+             */
             Double valor = ((Number) this.addSalarioValor.getValue()).doubleValue();
             LocalDate dtPagamento = this.addSalarioDtPagamento.getDate();
             String observacao = this.addSalarioObservacao.getText();
@@ -1469,6 +1478,9 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void btnAddUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUsuarioActionPerformed
         try {
+            /**
+             * Adiciona novo usuário
+             */
             String nome = this.addUsuarioNome.getText();
             String email = this.addUsuarioEmail.getText();
             String cpf = this.addUsuarioCpf.getText();
@@ -1489,6 +1501,9 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
+            /**
+             * Atualiza a folha de pontos
+             */
             TableModel model = this.tableFolhaPonto.getModel();
             this.pontoSalarioService.updateFolhaPonto(model);
             JOptionPane.showMessageDialog(null, "Folha de ponto atualizada com sucesso.");
@@ -1498,6 +1513,9 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnLoadMesAnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadMesAnoActionPerformed
+       /**
+        * Carrega o ano e o mês na folha de ponto
+        */
         this.pontoSalarioService.setCurrentAno(new Integer((String) this.pontoComboAno.getSelectedItem()));
         this.pontoSalarioService.setCurrentMes(this.pontoComboMes.getSelectedIndex() + 1);
         this.labelPagamentoMesAno.setText(this.pontoSalarioService.getCurrentMes() + "/" + this.pontoSalarioService.getCurrentAno());
@@ -1507,6 +1525,9 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void btnAddPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPagamentoActionPerformed
         try {
+            /**
+             * Adiciona novo pagamento
+             */
             String descricao = this.addPagamentoDescricao.getText();
             String tipo = (String) this.addPagamentoTipo.getSelectedItem();
             LocalDate dtPagamento = this.addPagamentoDtPagamento.getDate();
@@ -1528,6 +1549,9 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_tablePagamentosKeyReleased
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        /**
+         * Seleciona o pagamento para edição
+         */
         Integer linhaSelecionada = this.tablePagamentos.getSelectedRow();
         if (linhaSelecionada == -1) {
             JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha para edição");
@@ -1557,6 +1581,9 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void btnPagamentoEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagamentoEditarActionPerformed
+        /**
+         * Edita o pagamento
+         */
         this.btnAddPagamentoActionPerformed(null);
         this.pagamentoService.setIsEdicao(false);
         this.btnPagamentoEditar.setVisible(false);
@@ -1897,6 +1924,10 @@ public class MainScreen extends javax.swing.JFrame {
         }
     }
 
+    /**
+     *
+     * @param index
+     */
     public void loadMainMenuIndex(Integer index) {
         FileService fileService = new FileService();
         try {
@@ -2112,3 +2143,4 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JTable tableUsuarios;
     // End of variables declaration//GEN-END:variables
 }
+
